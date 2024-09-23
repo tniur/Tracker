@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol NewTrackerViewControllerDelegate: AnyObject {
+    func addNewTracker(_ tracker: Tracker, category: TrackerCategory)
+}
+
 final class TrackersViewController: UIViewController {
     
     // MARK: - Properties
@@ -77,7 +81,11 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
-    @objc private func addButtonTapped() { }
+    @objc private func addButtonTapped() {
+        let createTrackerViewController = CreateTrackerViewController()
+        createTrackerViewController.delegate = self
+        present(createTrackerViewController, animated: true)
+    }
     
     private func navigationBarConfigure() {
         navigationItem.title = "Трекеры"
@@ -86,5 +94,11 @@ final class TrackersViewController: UIViewController {
         let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addButtonTapped))
         addButton.tintColor = .black
         navigationItem.leftBarButtonItem = addButton
+    }
+}
+
+extension TrackersViewController: NewTrackerViewControllerDelegate {
+    func addNewTracker(_ tracker: Tracker, category: TrackerCategory) {
+        print("New Tracker added: \(tracker.name)")
     }
 }
