@@ -15,6 +15,9 @@ final class TrackerCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    private var isChecked: Bool = false
+    private var record: Int = 0
+    
     weak var delegate: TrackerCellDelegate?
     
     static let identifier = "TrackerCell"
@@ -45,17 +48,16 @@ final class TrackerCell: UICollectionViewCell {
         return label
     }()
     
-    private let daysCounterLabel: UILabel = {
+    private let recordLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypBlack
-        label.text = "0 дней"
         return label
     }()
     
     private let emojiLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.font = .systemFont(ofSize: 14, weight: .regular)
         return label
     }()
     
@@ -87,11 +89,50 @@ final class TrackerCell: UICollectionViewCell {
     
     // MARK: - Methods
     
-    func configure(backgroundColor: UIColor, emoji: String, title: String) {
+    func configure(backgroundColor: UIColor, emoji: String, title: String, record: Int, isChecked: Bool) {
+        self.record = record
+        self.isChecked = isChecked
+        
         backgroundCardView.backgroundColor = backgroundColor
         doneButton.backgroundColor = backgroundColor
         titleLabel.text = title
         emojiLabel.text = emoji
+        
+        updateButtonView()
+        updateRecordLabel()
+    }
+    
+    func updateButton() {
+        isChecked = !isChecked
+        record = isChecked ? (record + 1) : (record - 1)
+        
+        updateButtonView()
+        updateRecordLabel()
+    }
+    
+    func getChecked() -> Bool {
+        return isChecked
+    }
+    
+    private func updateRecordLabel() {
+        switch record % 10 {
+        case 1:
+            recordLabel.text = "\(record) день"
+        case 2,3,4:
+            recordLabel.text = "\(record) дня"
+        default:
+            recordLabel.text = "\(record) дней"
+        }
+    }
+    
+    private func updateButtonView() {
+        if isChecked {
+            doneButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            doneButton.alpha = 0.3
+        } else {
+            doneButton.setImage(UIImage(systemName: "plus"), for: .normal)
+            doneButton.alpha = 1
+        }
     }
     
     private func setup() {
@@ -104,7 +145,7 @@ final class TrackerCell: UICollectionViewCell {
         contentView.layer.masksToBounds = true
         contentView.backgroundColor = .white
         
-        [backgroundCardView, titleLabel, daysCounterLabel, doneButton, emojiBackgroundView, emojiLabel].forEach {
+        [backgroundCardView, titleLabel, recordLabel, doneButton, emojiBackgroundView, emojiLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -114,7 +155,7 @@ final class TrackerCell: UICollectionViewCell {
         
         contentView.addSubview(backgroundCardView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(daysCounterLabel)
+        contentView.addSubview(recordLabel)
         contentView.addSubview(doneButton)
         contentView.addSubview(emojiBackgroundView)
         contentView.addSubview(emojiLabel)
@@ -135,8 +176,8 @@ final class TrackerCell: UICollectionViewCell {
         ])
         
         NSLayoutConstraint.activate([
-            daysCounterLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            daysCounterLabel.centerYAnchor.constraint(equalTo: doneButton.centerYAnchor),
+            recordLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            recordLabel.centerYAnchor.constraint(equalTo: doneButton.centerYAnchor),
         ])
         
         NSLayoutConstraint.activate([

@@ -16,12 +16,15 @@ final class TrackersViewController: UIViewController {
     // MARK: - Properties
     
     private var currentDate: Date = Date()
-    private var categories: [TrackerCategory] = []
+    private var categories: [TrackerCategory] = [TrackerCategory(title: "Работа", trackers: []), TrackerCategory(title: "Учеба", trackers: [])]
     private var filteredByDateCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
+    private var trackersRecords = [String: Int]()
     private let dateFormatter = DateFormatter()
     
     // MARK: - View
+    
+    private let searchController = UISearchController(searchResultsController: nil)
     
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -133,7 +136,7 @@ final class TrackersViewController: UIViewController {
         
         for category in categories {
             let filteredTrackers = category.trackers.filter { tracker in
-                tracker.timetable.contains(weekDay)
+                tracker.timetable.contains(weekDay) || tracker.timetable.isEmpty
             }
             
             if !filteredTrackers.isEmpty {
@@ -175,6 +178,13 @@ final class TrackersViewController: UIViewController {
         navigationItem.leftBarButtonItem = addButton
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+        
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Поиск"
+        
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
 }
 
@@ -195,6 +205,7 @@ extension TrackersViewController: NewTrackerViewControllerDelegate {
             }
         }
         
+        trackersRecords[tracker.id.uuidString] = 0
         categories = newCategories
         updateTrackersCollection()
     }
@@ -220,7 +231,16 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.prepareForReuse()
         
         let tracker = filteredByDateCategories[indexPath.section].trackers[indexPath.row]
-        cell.configure(backgroundColor: tracker.color, emoji: tracker.emoji, title: tracker.name)
+        
+        var isChecked = false
+        
+        completedTrackers.forEach {
+            if $0.trackerId == tracker.id && $0.date == currentDate {
+                isChecked = true
+            }
+        }
+        
+        cell.configure(backgroundColor: tracker.color, emoji: tracker.emoji, title: tracker.name, record: trackersRecords[tracker.id.uuidString] ?? 0, isChecked: isChecked)
         cell.delegate = self
         
         return cell
@@ -254,7 +274,37 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 extension TrackersViewController: TrackerCellDelegate {
     func didTapButton(in cell: TrackerCell) {
         if let indexPath = trackersCollection.indexPath(for: cell) {
-            print("Button tapped in cell at indexPath: \(indexPath)")
+            if currentDate > Date() { return }
+            
+            let tracker = filteredByDateCategories[indexPath.section].trackers[indexPath.row]
+            
+            let isChecked = cell.getChecked()
+            
+            if isChecked {
+                for i in 0 ..< completedTrackers.count {
+                    if completedTrackers[i].trackerId == tracker.id && completedTrackers[i].date == currentDate {
+                        completedTrackers.remove(at: i)
+                        if let currentCount = trackersRecords[tracker.id.uuidString] {
+                            trackersRecords[tracker.id.uuidString] = currentCount - 1
+                        }
+                        break
+                    }
+                }
+            } else {
+                completedTrackers.append(TrackerRecord(trackerId: tracker.id, date: currentDate))
+                if let currentCount = trackersRecords[tracker.id.uuidString] {
+                    trackersRecords[tracker.id.uuidString] = currentCount + 1
+                }
+            } 
+            cell.updateButton()
         }
+    }
+}
+
+// MARK: - UISearchResultsUpdating
+
+extension TrackersViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let _ = searchController.searchBar.text ?? ""
     }
 }
