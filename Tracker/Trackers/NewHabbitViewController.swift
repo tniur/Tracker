@@ -13,7 +13,7 @@ final class NewHabbitViewController: UIViewController {
     
     weak var delegate: NewTrackerViewControllerDelegate?
     
-    private var category: TrackerCategory? = TrackerCategory(title: "По умолчанию", trackers: [])
+    private var category: TrackerCategory? = TrackerCategory(title: "Работа", trackers: [])
     private var timetable = [WeekDay]()
     private let trackerSettingsCategory = ["Категория", "Расписание"]
     private let trackerSettingsTableViewCellHeight: CGFloat = 75

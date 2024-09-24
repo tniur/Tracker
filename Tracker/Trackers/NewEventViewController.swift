@@ -13,7 +13,7 @@ final class NewEventViewController: UIViewController {
     
     weak var delegate: NewTrackerViewControllerDelegate?
     
-    private var category: TrackerCategory? = TrackerCategory(title: "По умолчанию", trackers: [])
+    private var category: TrackerCategory? = TrackerCategory(title: "Учеба", trackers: [])
     private let trackerSettingsCategory = ["Категория"]
     private let trackerSettingsTableViewCellHeight: CGFloat = 75
     

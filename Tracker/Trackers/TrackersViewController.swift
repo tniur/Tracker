@@ -182,7 +182,21 @@ final class TrackersViewController: UIViewController {
 
 extension TrackersViewController: NewTrackerViewControllerDelegate {
     func addNewTracker(_ tracker: Tracker, category: TrackerCategory) {
-        print("New Tracker added: \(tracker.name)")
+        var newCategories: [TrackerCategory] = []
+        
+        categories.forEach {
+            if $0.title != category.title {
+                newCategories.append($0)
+            } else {
+                let title = $0.title
+                let trackers = $0.trackers + [tracker]
+                let newCategory = TrackerCategory(title: title, trackers: trackers)
+                newCategories.append(newCategory)
+            }
+        }
+        
+        categories = newCategories
+        updateTrackersCollection()
     }
 }
 
