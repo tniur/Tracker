@@ -12,7 +12,7 @@ struct Tracker {
     let name: String
     let color: UIColor
     let emoji: String
-    let timetable: [WeekDay]?
+    let timetable: [WeekDay]
 }
 
 enum WeekDay: String {
@@ -23,4 +23,25 @@ enum WeekDay: String {
     case friday = "Пт"
     case saturday = "Сб"
     case sunday = "Вс"
+    
+    static func getWeekDayFrom(dayName value: String) -> WeekDay? {
+        switch value {
+        case "Monday":
+            return .monday
+        case "Tuesday":
+            return .tuesday
+        case "Wednesday":
+            return .wednesday
+        case "Thursday":
+            return .thursday
+        case "Friday":
+            return .friday
+        case "Saturday":
+            return .saturday
+        case "Sunday":
+            return .sunday
+        default:
+            return nil
+        }
+    }
 }

@@ -15,9 +15,11 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var currentDate: Date?
+    private var currentDate: Date = Date()
     private var categories: [TrackerCategory] = []
+    private var filteredByDateCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
+    private let dateFormatter = DateFormatter()
     
     // MARK: - View
     
@@ -70,11 +72,12 @@ final class TrackersViewController: UIViewController {
     
     private func setup() {
         navigationBarConfigure()
-        
         setupView()
         setupConstraints()
         setupCollection()
         setupTargets()
+        
+        updateTrackersCollection()
     }
     
     private func setupView() {
@@ -87,6 +90,7 @@ final class TrackersViewController: UIViewController {
         view.addSubview(trackersCollection)
         
         errorStack.isHidden = true
+        trackersCollection.isHidden = true
     }
     
     private func setupConstraints() {
@@ -119,8 +123,41 @@ final class TrackersViewController: UIViewController {
         trackersCollection.register(TrackersCollectionSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackersCollectionSupplementaryView.reuseId)
     }
     
+    private func filterCategoriesByDate() {
+        dateFormatter.dateFormat = "EEEE"
+        filteredByDateCategories.removeAll()
+        
+        guard let weekDay = WeekDay.getWeekDayFrom(dayName: dateFormatter.string(from: currentDate)) else {
+            return
+        }
+        
+        for category in categories {
+            let filteredTrackers = category.trackers.filter { tracker in
+                tracker.timetable.contains(weekDay)
+            }
+            
+            if !filteredTrackers.isEmpty {
+                filteredByDateCategories.append(TrackerCategory(title: category.title, trackers: filteredTrackers))
+            }
+        }
+        
+        if filteredByDateCategories.isEmpty {
+            errorStack.isHidden = false
+            trackersCollection.isHidden = true
+        } else {
+            errorStack.isHidden = true
+            trackersCollection.isHidden = false
+        }
+    }
+    
+    private func updateTrackersCollection() {
+        filterCategoriesByDate()
+        trackersCollection.reloadData()
+    }
+    
     @objc func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
+        updateTrackersCollection()
     }
     
     @objc private func addButtonTapped() {
@@ -154,11 +191,11 @@ extension TrackersViewController: NewTrackerViewControllerDelegate {
 extension TrackersViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return filteredByDateCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        return filteredByDateCategories[section].trackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -167,7 +204,9 @@ extension TrackersViewController: UICollectionViewDataSource {
         }
         
         cell.prepareForReuse()
-        cell.configure(backgroundColor: .blue, emoji: "🌞", title: "Lorem Insup")
+        
+        let tracker = filteredByDateCategories[indexPath.section].trackers[indexPath.row]
+        cell.configure(backgroundColor: tracker.color, emoji: tracker.emoji, title: tracker.name)
         cell.delegate = self
         
         return cell
@@ -186,10 +225,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TrackersCollectionSupplementaryView.reuseId, for: indexPath) as! TrackersCollectionSupplementaryView
         
-        switch indexPath.section {
-        default:
-            header.titleLabel.text = "По умолчанию"
-        }
+        header.titleLabel.text = filteredByDateCategories[indexPath.section].title
         
         return header
     }
