@@ -95,6 +95,7 @@ final class NewHabbitViewController: UIViewController {
         setupConstraints()
         setupTableView()
         setupTargets()
+        setupTextField()
     }
     
     private func setupView() {
@@ -143,6 +144,13 @@ final class NewHabbitViewController: UIViewController {
         ])
     }
     
+    private func setupTextField() {
+        trackerTitleTextField.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
     private func setupTargets() {
         cancelButton.addTarget(self, action: #selector(cancelButtonAction), for: .touchUpInside)
         createButton.addTarget(self, action: #selector(createButtonAction), for: .touchUpInside)
@@ -174,11 +182,16 @@ final class NewHabbitViewController: UIViewController {
     
     @objc private func createButtonAction() {
         guard let category = category,
-            let trackerName = trackerTitleTextField.text else { return }
+              let trackerName = trackerTitleTextField.text else { return }
         let newTracker = Tracker(id: UUID(), name: trackerName, color: .red, emoji: "🏄‍♂️", timetable: timetable)
         
         delegate?.addNewTracker(newTracker, category: category)
-        dismiss(animated: true)
+        
+        if let rootController = self.presentingViewController?.presentingViewController {
+            rootController.dismiss(animated: true, completion: nil)
+        } else {
+            dismiss(animated: true)
+        }
     }
 }
 
@@ -257,5 +270,16 @@ extension NewHabbitViewController: TimetableViewControllerDelegate {
     
     func getTimetable() -> [WeekDay] {
         timetable
+    }
+}
+
+extension NewHabbitViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
 }
