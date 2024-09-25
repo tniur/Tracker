@@ -153,6 +153,11 @@ final class TrackersViewController: UIViewController {
         }
     }
     
+    private func compareDates(firstDate: Date, secondDate: Date) -> ComparisonResult {
+        let calendar = Calendar.current
+        return calendar.compare(firstDate, to: secondDate, toGranularity: .day)
+    }
+    
     private func updateTrackersCollection() {
         filterCategoriesByDate()
         trackersCollection.reloadData()
@@ -235,7 +240,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         var isChecked = false
         
         completedTrackers.forEach {
-            if $0.trackerId == tracker.id && $0.date == currentDate {
+            if $0.trackerId == tracker.id && compareDates(firstDate: $0.date, secondDate: currentDate) == .orderedSame {
                 isChecked = true
             }
         }
@@ -274,7 +279,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 extension TrackersViewController: TrackerCellDelegate {
     func didTapButton(in cell: TrackerCell) {
         if let indexPath = trackersCollection.indexPath(for: cell) {
-            if currentDate > Date() { return }
+            if compareDates(firstDate: currentDate, secondDate: Date()) == .orderedDescending { return }
             
             let tracker = filteredByDateCategories[indexPath.section].trackers[indexPath.row]
             
@@ -282,7 +287,7 @@ extension TrackersViewController: TrackerCellDelegate {
             
             if isChecked {
                 for i in 0 ..< completedTrackers.count {
-                    if completedTrackers[i].trackerId == tracker.id && completedTrackers[i].date == currentDate {
+                    if completedTrackers[i].trackerId == tracker.id && compareDates(firstDate: completedTrackers[i].date, secondDate: currentDate) == .orderedSame {
                         completedTrackers.remove(at: i)
                         if let currentCount = trackersRecords[tracker.id.uuidString] {
                             trackersRecords[tracker.id.uuidString] = currentCount - 1
