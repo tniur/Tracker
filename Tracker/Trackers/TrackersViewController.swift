@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol NewTrackerViewControllerDelegate: AnyObject {
-    func addNewTracker(_ tracker: Tracker, category: TrackerCategory)
-}
-
 final class TrackersViewController: UIViewController {
     
     // MARK: - Properties
@@ -169,9 +165,9 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func addButtonTapped() {
-        let createTrackerViewController = CreateTrackerViewController()
-        createTrackerViewController.delegate = self
-        present(createTrackerViewController, animated: true)
+        let chooseTrackerTypeViewController = ChooseTrackerTypeViewController()
+        chooseTrackerTypeViewController.delegate = self
+        present(chooseTrackerTypeViewController, animated: true)
     }
     
     private func navigationBarConfigure() {
@@ -195,7 +191,7 @@ final class TrackersViewController: UIViewController {
 
 // MARK: - NewTrackerViewControllerDelegate
 
-extension TrackersViewController: NewTrackerViewControllerDelegate {
+extension TrackersViewController: CreateTrackerViewControllerDelegate {
     func addNewTracker(_ tracker: Tracker, category: TrackerCategory) {
         var newCategories: [TrackerCategory] = []
         
