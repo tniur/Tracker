@@ -20,7 +20,7 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - View
     
-    private let searchController = UISearchController(searchResultsController: nil)
+    private let searchBar = UISearchBar()
     
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -71,6 +71,7 @@ final class TrackersViewController: UIViewController {
     
     private func setup() {
         navigationBarConfigure()
+        setupSearchBar()
         setupView()
         setupConstraints()
         setupCollection()
@@ -80,10 +81,10 @@ final class TrackersViewController: UIViewController {
     }
     
     private func setupView() {
-        [errorStack, errorImageView, trackersCollection].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-
+        [searchBar, errorStack, errorImageView, trackersCollection].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        
         [errorImageView, errorLabel].forEach { errorStack.addArrangedSubview($0) }
-        [errorStack, trackersCollection].forEach { view.addSubview($0) }
+        [searchBar, errorStack, trackersCollection].forEach { view.addSubview($0) }
         
         errorStack.isHidden = true
         trackersCollection.isHidden = true
@@ -91,17 +92,32 @@ final class TrackersViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            errorStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            errorStack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            
+            errorStack.centerXAnchor.constraint(equalTo: trackersCollection.centerXAnchor),
+            errorStack.centerYAnchor.constraint(equalTo: trackersCollection.centerYAnchor),
+            
             errorImageView.widthAnchor.constraint(equalToConstant: 80),
             errorImageView.heightAnchor.constraint(equalToConstant: 80),
-
-            trackersCollection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            
+            trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             trackersCollection.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackersCollection.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+    }
+    
+    private func setupSearchBar() {
+        searchBar.placeholder = "Поиск"
+        searchBar.delegate = self
+        searchBar.searchBarStyle = .minimal
+        searchBar.showsCancelButton = false
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
     private func setupTargets() {
@@ -165,14 +181,7 @@ final class TrackersViewController: UIViewController {
         let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addButtonTapped))
         addButton.tintColor = .black
         navigationItem.leftBarButtonItem = addButton
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
-        
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Поиск"
-        
-        navigationItem.searchController = searchController
         definesPresentationContext = true
     }
 }
@@ -298,10 +307,14 @@ extension TrackersViewController: TrackerCellDelegate {
     }
 }
 
-// MARK: - UISearchResultsUpdating
-
-extension TrackersViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        let _ = searchController.searchBar.text ?? ""
+extension TrackersViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) { }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
 }
