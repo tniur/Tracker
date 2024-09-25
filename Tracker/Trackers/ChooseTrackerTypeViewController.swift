@@ -73,11 +73,8 @@ final class ChooseTrackerTypeViewController: UIViewController {
         let views = [titleLabel, buttonsStack, habitButton, irregularEventsButton]
         views.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
-        view.addSubview(titleLabel)
-        view.addSubview(buttonsStack)
-        
-        buttonsStack.addArrangedSubview(habitButton)
-        buttonsStack.addArrangedSubview(irregularEventsButton)
+        [titleLabel, buttonsStack].forEach { view.addSubview($0) }
+        [habitButton, irregularEventsButton].forEach { buttonsStack.addArrangedSubview($0) }
     }
     
     private func setupButtonsAction() {
@@ -88,16 +85,12 @@ final class ChooseTrackerTypeViewController: UIViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 26),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
             buttonsStack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             buttonsStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             buttonsStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-        ])
-        
-        NSLayoutConstraint.activate([
+
             habitButton.heightAnchor.constraint(equalToConstant: 60),
             irregularEventsButton.heightAnchor.constraint(equalToConstant: 60)
         ])

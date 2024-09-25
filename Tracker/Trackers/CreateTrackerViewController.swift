@@ -125,15 +125,14 @@ final class CreateTrackerViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .white
         
-        [titleLabel, trackerTitleTextField, trackerSettingsTableView, buttonsStack, cancelButton, createButton].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [titleLabel, trackerTitleTextField, trackerSettingsTableView,
+         buttonsStack, cancelButton, createButton
+        ].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         
-        view.addSubview(titleLabel)
-        view.addSubview(trackerTitleTextField)
-        view.addSubview(trackerSettingsTableView)
-        view.addSubview(buttonsStack)
-        
-        buttonsStack.addArrangedSubview(cancelButton)
-        buttonsStack.addArrangedSubview(createButton)
+        [titleLabel, trackerTitleTextField, trackerSettingsTableView, buttonsStack].forEach { view.addSubview($0) }
+        [cancelButton, createButton].forEach { buttonsStack.addArrangedSubview($0) }
     }
     
     private func setupConstraints() {
@@ -192,11 +191,11 @@ final class CreateTrackerViewController: UIViewController {
         case .habbit:
             let isTextFieldFilled = !(trackerTitleTextField.text?.isEmpty ?? true)
             let isTimetableFilled = !timetable.isEmpty
-            let isCategoryFilled = (category == nil) ? false : true
+            let isCategoryFilled = category != nil
             createButton.isEnabled = isTextFieldFilled && isTimetableFilled && isCategoryFilled
         case .event:
             let isTextFieldFilled = !(trackerTitleTextField.text?.isEmpty ?? true)
-            let isCategoryFilled = (category == nil) ? false : true
+            let isCategoryFilled = category != nil
             createButton.isEnabled = isTextFieldFilled && isCategoryFilled
         }
         
@@ -243,15 +242,12 @@ extension CreateTrackerViewController: UITableViewDataSource, UITableViewDelegat
         cell.detailTextLabel?.textColor = UIColor(named: "YP Gray")
         cell.detailTextLabel?.font = .systemFont(ofSize: 17)
         
+        cell.roundCorners(for: indexPath, in: tableView, totalRows: trackerSettingsCategory.count, with: 16)
+        
         switch indexPath.row {
-        case 0:
-            cell.layer.cornerRadius = 16
-            cell.layer.masksToBounds = true
-            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            
-            if category != nil {
-                cell.detailTextLabel?.text = category?.title
-            }
+        case 0:            
+            guard let category else { return cell }
+            cell.detailTextLabel?.text = category.title
         case 1:
             if !timetable.isEmpty {
                 if timetable.count == 7 {
@@ -263,10 +259,6 @@ extension CreateTrackerViewController: UITableViewDataSource, UITableViewDelegat
             }
         default:
             break
-        }
-        
-        if indexPath.row == trackerSettingsCategory.count - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         }
         
         return cell

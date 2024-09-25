@@ -145,20 +145,14 @@ final class TrackerCell: UICollectionViewCell {
         contentView.layer.masksToBounds = true
         contentView.backgroundColor = .white
         
-        [backgroundCardView, titleLabel, recordLabel, doneButton, emojiBackgroundView, emojiLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-        
         doneButton.layer.cornerRadius = doneButtonSize / 2
         doneButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         emojiBackgroundView.layer.cornerRadius = emojiBackgroundSize / 2
         
-        contentView.addSubview(backgroundCardView)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(recordLabel)
-        contentView.addSubview(doneButton)
-        contentView.addSubview(emojiBackgroundView)
-        contentView.addSubview(emojiLabel)
+        [backgroundCardView, titleLabel, recordLabel, doneButton, emojiBackgroundView, emojiLabel].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview($0)
+        }
     }
     
     private func setupConstraints() {

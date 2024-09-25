@@ -81,12 +81,9 @@ final class TrackersViewController: UIViewController {
     
     private func setupView() {
         [errorStack, errorImageView, trackersCollection].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        
-        errorStack.addArrangedSubview(errorImageView)
-        errorStack.addArrangedSubview(errorLabel)
-        
-        view.addSubview(errorStack)
-        view.addSubview(trackersCollection)
+
+        [errorImageView, errorLabel].forEach { errorStack.addArrangedSubview($0) }
+        [errorStack, trackersCollection].forEach { view.addSubview($0) }
         
         errorStack.isHidden = true
         trackersCollection.isHidden = true
@@ -95,15 +92,11 @@ final class TrackersViewController: UIViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             errorStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            errorStack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
+            errorStack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
             errorImageView.widthAnchor.constraint(equalToConstant: 80),
-            errorImageView.heightAnchor.constraint(equalToConstant: 80)
-        ])
-        
-        NSLayoutConstraint.activate([
+            errorImageView.heightAnchor.constraint(equalToConstant: 80),
+
             trackersCollection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             trackersCollection.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackersCollection.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -140,13 +133,8 @@ final class TrackersViewController: UIViewController {
             }
         }
         
-        if filteredByDateCategories.isEmpty {
-            errorStack.isHidden = false
-            trackersCollection.isHidden = true
-        } else {
-            errorStack.isHidden = true
-            trackersCollection.isHidden = false
-        }
+        errorStack.isHidden = !filteredByDateCategories.isEmpty
+        trackersCollection.isHidden = filteredByDateCategories.isEmpty
     }
     
     private func compareDates(firstDate: Date, secondDate: Date) -> ComparisonResult {
@@ -282,22 +270,30 @@ extension TrackersViewController: TrackerCellDelegate {
             let isChecked = cell.getChecked()
             
             if isChecked {
-                for i in 0 ..< completedTrackers.count {
-                    if completedTrackers[i].trackerId == tracker.id && compareDates(firstDate: completedTrackers[i].date, secondDate: currentDate) == .orderedSame {
-                        completedTrackers.remove(at: i)
-                        if let currentCount = trackersRecords[tracker.id.uuidString] {
-                            trackersRecords[tracker.id.uuidString] = currentCount - 1
-                        }
-                        break
-                    }
-                }
+                incompleteTrackerForCurrentDate(tracker: tracker)
             } else {
-                completedTrackers.append(TrackerRecord(trackerId: tracker.id, date: currentDate))
-                if let currentCount = trackersRecords[tracker.id.uuidString] {
-                    trackersRecords[tracker.id.uuidString] = currentCount + 1
-                }
-            } 
+                completeTrackerForCurrentDate(tracker: tracker)
+            }
             cell.updateButton()
+        }
+    }
+    
+    private func incompleteTrackerForCurrentDate(tracker: Tracker) {
+        for i in 0 ..< completedTrackers.count {
+            if completedTrackers[i].trackerId == tracker.id && compareDates(firstDate: completedTrackers[i].date, secondDate: currentDate) == .orderedSame {
+                completedTrackers.remove(at: i)
+                if let currentCount = trackersRecords[tracker.id.uuidString] {
+                    trackersRecords[tracker.id.uuidString] = currentCount - 1
+                }
+                break
+            }
+        }
+    }
+    
+    private func completeTrackerForCurrentDate(tracker: Tracker) {
+        completedTrackers.append(TrackerRecord(trackerId: tracker.id, date: currentDate))
+        if let currentCount = trackersRecords[tracker.id.uuidString] {
+            trackersRecords[tracker.id.uuidString] = currentCount + 1
         }
     }
 }

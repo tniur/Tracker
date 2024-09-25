@@ -18,8 +18,16 @@ final class TimetableViewController: UIViewController {
     
     weak var delegate: TimetableViewControllerDelegate?
     
-    private var selectedWeekDays = [(WeekDay.monday, false), (WeekDay.tuesday, false), (WeekDay.wednesday, false), (WeekDay.thursday, false), (WeekDay.friday, false), (WeekDay.saturday, false), (WeekDay.sunday, false)]
-    private let timetableTableViewCategory = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private var selectedWeekDays: [(WeekDay, Bool)] = [
+        (.monday, false),
+        (.tuesday, false),
+        (.wednesday, false),
+        (.thursday, false),
+        (.friday, false),
+        (.saturday, false),
+        (.sunday, false)
+    ]
+    private let timetableTableViewCategory = Constants.timetableCategory
     private let timetableTableViewCellHeight: CGFloat = 75
     
     // MARK: - View
@@ -72,28 +80,22 @@ final class TimetableViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .white
         
-        let views = [titleLabel, timetableTableView, doneButton]
-        views.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        
-        view.addSubview(titleLabel)
-        view.addSubview(timetableTableView)
-        view.addSubview(doneButton)
+        [titleLabel, timetableTableView, doneButton].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 26),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
             timetableTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
             timetableTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             timetableTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            timetableTableView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: 20)
-        ])
-        
-        NSLayoutConstraint.activate([
+            timetableTableView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: 20),
+            
             doneButton.heightAnchor.constraint(equalToConstant: 60),
             doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -135,11 +137,7 @@ final class TimetableViewController: UIViewController {
     }
     
     @objc func switchChanged(_ sender: UISwitch) {
-        if sender.isOn {
-            selectedWeekDays[sender.tag].1 = true
-        } else {
-            selectedWeekDays[sender.tag].1 = false
-        }
+        selectedWeekDays[sender.tag].1 = sender.isOn
     }
 }
 
@@ -166,20 +164,7 @@ extension TimetableViewController: UITableViewDataSource, UITableViewDelegate {
         switchView.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
         
         cell.accessoryView = switchView
-        
-        switch indexPath.row {
-        case 0:
-            cell.layer.cornerRadius = 16
-            cell.layer.masksToBounds = true
-            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        case timetableTableViewCategory.count-1:
-            cell.layer.cornerRadius = 16
-            cell.layer.masksToBounds = true
-            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-        default:
-            break
-        }
+        cell.roundCorners(for: indexPath, in: tableView, totalRows: timetableTableViewCategory.count, with: 16)
         
         return cell
     }
