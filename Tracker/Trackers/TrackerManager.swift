@@ -44,8 +44,7 @@ final class TrackerManager {
     }
     
     func filterTrackers() {
-        let trackersCoreData = trackerStore.obtainTrackersCoreData()
-        let trackers = getTrackersFromTrackersCoreData(trackersCoreData: trackersCoreData)
+        let trackers = trackerStore.obtainTrackersCoreData()
         
         var newFilteredTrackers: [Tracker] = []
         
@@ -61,20 +60,6 @@ final class TrackerManager {
         
         filtredTrackers = newFilteredTrackers
         delegate?.didUpdate()
-    }
-    
-    private func getTrackersFromTrackersCoreData(trackersCoreData: [TrackerCoreData]) -> [Tracker] {
-        var trackers: [Tracker] = []
-        trackersCoreData.forEach {
-            guard let id = $0.id,
-                  let name = $0.name,
-                  let color = $0.color as? UIColor,
-                  let emoji = $0.emoji,
-                  let timetable = $0.timetable as? [WeekDay] else { return }
-            
-            trackers.append(Tracker(id: id, name: name, color: color, emoji: emoji, timetable: timetable))
-        }
-        return trackers
     }
 }
 

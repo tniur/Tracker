@@ -10,6 +10,8 @@ import CoreData
 
 final class TrackerRecordStore {
     
+    // MARK: - Properties
+    
     private let trackerStore = TrackerStore()
     
     private let context: NSManagedObjectContext
@@ -48,30 +50,6 @@ final class TrackerRecordStore {
         try context.save()
     }
     
-    func deleteRecord(_ record: TrackerRecordCoreData) throws {
-        context.delete(record)
-        
-        try context.save()
-    }
-    
-    func getRecord(byId id: UUID, date: Date) throws -> TrackerRecordCoreData? {
-        let startOfDay = Calendar.current.startOfDay(for: date)
-        guard let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay) else { return nil }
-        
-        let fetchRequest = TrackerRecordCoreData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "trackerId == %@ AND date >= %@ AND date < %@",
-                                             id as CVarArg, startOfDay as CVarArg, endOfDay as CVarArg)
-        fetchRequest.fetchLimit = 1
-        
-        do {
-            let record = try context.fetch(fetchRequest)
-            return record.first
-        } catch {
-            print("Error fetching records: \(error.localizedDescription)")
-            return nil
-        }
-    }
-    
     func countRecordsForTracker(byId id: UUID) -> Int {
         let fetchRequest = TrackerRecordCoreData.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "trackerId == %@", id as CVarArg)
@@ -100,5 +78,29 @@ final class TrackerRecordStore {
             print("Error fetching records: \(error.localizedDescription)")
             return false
         }
+    }
+    
+    private func getRecord(byId id: UUID, date: Date) throws -> TrackerRecordCoreData? {
+        let startOfDay = Calendar.current.startOfDay(for: date)
+        guard let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay) else { return nil }
+        
+        let fetchRequest = TrackerRecordCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "trackerId == %@ AND date >= %@ AND date < %@",
+                                             id as CVarArg, startOfDay as CVarArg, endOfDay as CVarArg)
+        fetchRequest.fetchLimit = 1
+        
+        do {
+            let record = try context.fetch(fetchRequest)
+            return record.first
+        } catch {
+            print("Error fetching records: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    private func deleteRecord(_ record: TrackerRecordCoreData) throws {
+        context.delete(record)
+        
+        try context.save()
     }
 }

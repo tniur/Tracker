@@ -18,7 +18,7 @@ final class TrackerStore: NSObject {
     
     weak var delegate: TrackerStoreDelegate?
     
-    let fetchedResultsController: NSFetchedResultsController<TrackerCoreData>
+    private let fetchedResultsController: NSFetchedResultsController<TrackerCoreData>
     
     private let context: NSManagedObjectContext
     
@@ -66,11 +66,12 @@ final class TrackerStore: NSObject {
         try context.save()
     }
     
-    func obtainTrackersCoreData() -> [TrackerCoreData] {
+    func obtainTrackersCoreData() -> [Tracker] {
         let fetchRequest = TrackerCoreData.fetchRequest()
         do {
             let trackersCoreData = try context.fetch(fetchRequest)
-            return trackersCoreData
+            let trackers = getTrackersFromTrackersCoreData(trackersCoreData: trackersCoreData)
+            return trackers
         } catch {
             print("Error fetching trackers: \(error.localizedDescription)")
         }
@@ -78,16 +79,18 @@ final class TrackerStore: NSObject {
         return []
     }
     
-    func fetchTrackerById(_ id: UUID) -> [TrackerCoreData]? {
-        let fetchRequest = TrackerCoreData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        do {
-            let trackersCoreData = try context.fetch(fetchRequest)
-            return trackersCoreData
-        } catch {
-            print("Error fetching trackers: \(error.localizedDescription)")
-            return nil
+    private func getTrackersFromTrackersCoreData(trackersCoreData: [TrackerCoreData]) -> [Tracker] {
+        var trackers: [Tracker] = []
+        trackersCoreData.forEach {
+            guard let id = $0.id,
+                  let name = $0.name,
+                  let color = $0.color as? UIColor,
+                  let emoji = $0.emoji,
+                  let timetable = $0.timetable as? [WeekDay] else { return }
+            
+            trackers.append(Tracker(id: id, name: name, color: color, emoji: emoji, timetable: timetable))
         }
+        return trackers
     }
 }
 
