@@ -415,7 +415,10 @@ extension CreateTrackerViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CreateTrackerCollectionSupplementaryView.reuseId, for: indexPath) as! CreateTrackerCollectionSupplementaryView
+        
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CreateTrackerCollectionSupplementaryView.reuseId, for: indexPath) as? CreateTrackerCollectionSupplementaryView else {
+            return UICollectionReusableView()
+        }
         
         header.titleLabel.text = collectionViewSections[indexPath.section].title
         

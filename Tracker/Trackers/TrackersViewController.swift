@@ -12,7 +12,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Properties
     
     private var currentDate: Date = Date()
-
+    
     private let trackerManager = TrackerManager()
     
     private let trackerRecordStore = TrackerRecordStore()
@@ -209,7 +209,9 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TrackersCollectionSupplementaryView.reuseId, for: indexPath) as! TrackersCollectionSupplementaryView
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TrackersCollectionSupplementaryView.reuseId, for: indexPath) as? TrackersCollectionSupplementaryView else {
+            return UICollectionReusableView()
+        }
         
         header.titleLabel.text = "Работа"
         
