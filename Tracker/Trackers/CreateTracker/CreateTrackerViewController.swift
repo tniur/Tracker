@@ -7,15 +7,9 @@
 
 import UIKit
 
-protocol CreateTrackerViewControllerDelegate: AnyObject {
-    func addNewTracker(_ tracker: Tracker, category: TrackerCategory)
-}
-
 final class CreateTrackerViewController: UIViewController {
     
     // MARK: - Properties
-    
-    weak var delegate: CreateTrackerViewControllerDelegate?
     
     private var category: TrackerCategory? = TrackerCategory(title: "Работа", trackers: [])
     private var timetable = [WeekDay]()
@@ -25,6 +19,8 @@ final class CreateTrackerViewController: UIViewController {
     private let trackerType: TrackerType
     private let trackerSettingsCategory: [String]
     private let trackerSettingsTableViewCellHeight: CGFloat = 75
+    
+    private let trackerStore = TrackerStore()
     
     private let collectionViewSections: [CollectionSection] = [
         CollectionSection(title: "Emoji", items: Constants.trackerEmoji),
@@ -276,7 +272,11 @@ final class CreateTrackerViewController: UIViewController {
         
         let newTracker = Tracker(id: UUID(), name: trackerName, color: color, emoji: emoji, timetable: timetable)
         
-        delegate?.addNewTracker(newTracker, category: category)
+        do {
+            try trackerStore.addNewTracker(newTracker)
+        } catch {
+            print("Error adding new tracker: \(error.localizedDescription)")
+        }
         
         if let rootController = self.presentingViewController?.presentingViewController {
             rootController.dismiss(animated: true, completion: nil)

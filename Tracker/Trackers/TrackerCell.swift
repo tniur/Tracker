@@ -15,9 +15,6 @@ final class TrackerCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    private var isChecked: Bool = false
-    private var record: Int = 0
-    
     weak var delegate: TrackerCellDelegate?
     
     static let identifier = "TrackerCell"
@@ -90,31 +87,11 @@ final class TrackerCell: UICollectionViewCell {
     // MARK: - Methods
     
     func configure(backgroundColor: UIColor, emoji: String, title: String, record: Int, isChecked: Bool) {
-        self.record = record
-        self.isChecked = isChecked
-        
         backgroundCardView.backgroundColor = backgroundColor
         doneButton.backgroundColor = backgroundColor
         titleLabel.text = title
         emojiLabel.text = emoji
         
-        updateButtonView()
-        updateRecordLabel()
-    }
-    
-    func updateButton() {
-        isChecked = !isChecked
-        record = isChecked ? (record + 1) : (record - 1)
-        
-        updateButtonView()
-        updateRecordLabel()
-    }
-    
-    func getChecked() -> Bool {
-        return isChecked
-    }
-    
-    private func updateRecordLabel() {
         switch record % 10 {
         case 1:
             recordLabel.text = "\(record) день"
@@ -123,9 +100,7 @@ final class TrackerCell: UICollectionViewCell {
         default:
             recordLabel.text = "\(record) дней"
         }
-    }
-    
-    private func updateButtonView() {
+        
         if isChecked {
             doneButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             doneButton.alpha = 0.3

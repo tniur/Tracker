@@ -9,10 +9,6 @@ import UIKit
 
 final class ChooseTrackerTypeViewController: UIViewController {
     
-    // MARK: - Properties
-    
-    weak var delegate: CreateTrackerViewControllerDelegate?
-    
     // MARK: - View
     
     private let titleLabel: UILabel = {
@@ -99,20 +95,12 @@ final class ChooseTrackerTypeViewController: UIViewController {
     @objc private func habbitButtonAction() {
         let createTrackerViewController = CreateTrackerViewController(trackerType: .habbit)
         createTrackerViewController.modalTransitionStyle = .coverVertical
-        createTrackerViewController.delegate = self
         present(createTrackerViewController, animated: true)
     }
     
     @objc private func irregularEventsButtonAction() {
         let createTrackerViewController = CreateTrackerViewController(trackerType: .event)
         createTrackerViewController.modalTransitionStyle = .coverVertical
-        createTrackerViewController.delegate = self
         present(createTrackerViewController, animated: true)
-    }
-}
-
-extension ChooseTrackerTypeViewController: CreateTrackerViewControllerDelegate {
-    func addNewTracker(_ tracker: Tracker, category: TrackerCategory) {
-        delegate?.addNewTracker(tracker, category: category)
     }
 }

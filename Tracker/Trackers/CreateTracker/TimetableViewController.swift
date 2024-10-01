@@ -46,6 +46,7 @@ final class TimetableViewController: UIViewController {
         tableView.layer.masksToBounds = true
         tableView.layer.cornerRadius = 16
         tableView.separatorColor = UIColor(named: "YP Gray")
+        tableView.allowsSelection = false
         return tableView
     }()
     
