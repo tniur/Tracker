@@ -5,7 +5,7 @@
 //  Created by Pavel Bobkov on 25.09.2024.
 //
 
-enum WeekDay: String {
+enum WeekDay: String, Codable {
     case monday = "Пн"
     case tuesday = "Вт"
     case wednesday = "Ср"
