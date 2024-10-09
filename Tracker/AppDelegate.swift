@@ -15,9 +15,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         WeekDaysTransformer.register()
-        
+
         window = UIWindow()
-        window?.rootViewController = TabBarController()
+        
+        let hasSeenOnboarding = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+        
+        if hasSeenOnboarding {
+            window?.rootViewController = TabBarController()
+        } else {
+            window?.rootViewController = OnboardingPageViewController(
+                transitionStyle: .scroll,
+                navigationOrientation: .horizontal,
+                options: .none)
+        }
+        
         window?.makeKeyAndVisible()
         return true
     }
