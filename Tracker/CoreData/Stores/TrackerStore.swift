@@ -18,6 +18,8 @@ final class TrackerStore: NSObject {
     
     weak var delegate: TrackerStoreDelegate?
     
+    private let trackerCategoryStore = TrackerCategoryStore()
+    
     private let fetchedResultsController: NSFetchedResultsController<TrackerCoreData>
     
     private let context: NSManagedObjectContext
@@ -55,13 +57,15 @@ final class TrackerStore: NSObject {
     
     // MARK: - Methods
     
-    func addNewTracker(_ tracker: Tracker) throws {
+    func addNewTracker(_ tracker: Tracker, _ category: TrackerCategory) throws {
         let trackerCoreData = TrackerCoreData(context: context)
         trackerCoreData.id = tracker.id
         trackerCoreData.name = tracker.name
         trackerCoreData.color = tracker.color
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.timetable = tracker.timetable as NSObject
+        
+        try trackerCategoryStore.addTrackerToCategory(categoryTitle: category.title, tracker: trackerCoreData)
         
         try context.save()
     }

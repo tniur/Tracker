@@ -11,7 +11,7 @@ final class CreateTrackerViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var category: TrackerCategory? = TrackerCategory(title: "Работа", trackers: [])
+    private var category: TrackerCategory?
     private var timetable = [WeekDay]()
     private var selectedEmojiIndex: Int? = nil
     private var selectedColorIndex: Int? = nil
@@ -273,7 +273,7 @@ final class CreateTrackerViewController: UIViewController {
         let newTracker = Tracker(id: UUID(), name: trackerName, color: color, emoji: emoji, timetable: timetable)
         
         do {
-            try trackerStore.addNewTracker(newTracker)
+            try trackerStore.addNewTracker(newTracker, category)
         } catch {
             print("Error adding new tracker: \(error.localizedDescription)")
         }
@@ -334,7 +334,10 @@ extension CreateTrackerViewController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            break
+            let chooseCategoryViewModel = ChooseCategoryViewModel()
+            chooseCategoryViewModel.delegate = self
+            let createCategoryViewController = ChooseCategoryViewController(viewModel: chooseCategoryViewModel)
+            present(createCategoryViewController, animated: true)
         case 1:
             let timetableViewController = TimetableViewController()
             timetableViewController.delegate = self
@@ -472,6 +475,15 @@ extension CreateTrackerViewController {
             cell.deselect()
             selectedColorIndex = nil
         }
+        updateCreateButtonState()
+    }
+}
+
+// MARK: - ChooseCategoryViewModelProtocol
+extension CreateTrackerViewController: ChooseCategoryViewModelProtocol {
+    func updateCategory(_ category: TrackerCategory?) {
+        self.category = category
+        trackerSettingsTableView.reloadData()
         updateCreateButtonState()
     }
 }

@@ -30,27 +30,7 @@ final class TrackersViewController: UIViewController {
         return datePicker
     }()
     
-    private let errorStack: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 8
-        stackView.alignment = .center
-        return stackView
-    }()
-    
-    private let errorImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "trackers_error")
-        return imageView
-    }()
-    
-    private let errorLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Что будем отслеживать?"
-        label.textColor = UIColor(named: "YP Black")
-        label.font = UIFont.systemFont(ofSize: 12)
-        return label
-    }()
+    private let placeholderView = PlaceholderView(frame: CGRect.zero, title: "Что будем отслеживать?", image: UIImage(named: "empty_placeholder"))
     
     private let trackersCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -83,10 +63,10 @@ final class TrackersViewController: UIViewController {
     }
     
     private func setupView() {
-        [searchBar, errorStack, errorImageView, trackersCollection].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        
-        [errorImageView, errorLabel].forEach { errorStack.addArrangedSubview($0) }
-        [searchBar, errorStack, trackersCollection].forEach { view.addSubview($0) }
+        [searchBar, placeholderView, trackersCollection].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         trackersCollection.isHidden = true
     }
@@ -97,11 +77,10 @@ final class TrackersViewController: UIViewController {
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             
-            errorStack.centerXAnchor.constraint(equalTo: trackersCollection.centerXAnchor),
-            errorStack.centerYAnchor.constraint(equalTo: trackersCollection.centerYAnchor),
-            
-            errorImageView.widthAnchor.constraint(equalToConstant: 80),
-            errorImageView.heightAnchor.constraint(equalToConstant: 80),
+            placeholderView.topAnchor.constraint(equalTo: trackersCollection.topAnchor),
+            placeholderView.bottomAnchor.constraint(equalTo: trackersCollection.bottomAnchor),
+            placeholderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            placeholderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             trackersCollection.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -160,7 +139,7 @@ final class TrackersViewController: UIViewController {
     
     private func changeCollectionViewDisplay(isHidden: Bool) {
         trackersCollection.isHidden = isHidden
-        errorStack.isHidden = !isHidden
+        placeholderView.isHidden = !isHidden
     }
 }
 
