@@ -15,9 +15,12 @@ final class ChooseCategoryViewModel {
     
     // MARK: - Properties
     
+    var previousChosenCategory: TrackerCategory?
+    
     weak var delegate: ChooseCategoryViewModelProtocol?
     
     var onCategoriesListStateChange: Binding<[TrackerCategory]>?
+    var onPreviousChosenCategoryStateChange: Binding<TrackerCategory?>?
     
     private let model: TrackerCategoryStore
     
@@ -39,7 +42,12 @@ final class ChooseCategoryViewModel {
         }
     }
     
+    func setupPreviousChosenCategory() {
+        onPreviousChosenCategoryStateChange?(previousChosenCategory)
+    }
+    
     func chosenCategory(_ category: TrackerCategory?) {
+        onPreviousChosenCategoryStateChange?(category)
         delegate?.updateCategory(category)
     }
 }

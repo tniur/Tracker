@@ -336,6 +336,7 @@ extension CreateTrackerViewController: UITableViewDataSource, UITableViewDelegat
         case 0:
             let chooseCategoryViewModel = ChooseCategoryViewModel()
             chooseCategoryViewModel.delegate = self
+            chooseCategoryViewModel.previousChosenCategory = category
             let createCategoryViewController = ChooseCategoryViewController(viewModel: chooseCategoryViewModel)
             present(createCategoryViewController, animated: true)
         case 1:

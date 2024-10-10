@@ -13,6 +13,8 @@ final class ChooseCategoryViewController: UIViewController {
     
     private var viewModel: ChooseCategoryViewModel?
     
+    private var previousChosenCategory: TrackerCategory?
+    
     private var сategories: [TrackerCategory] = []
     
     private let сategoryTableViewCellHeight: CGFloat = 75
@@ -73,10 +75,15 @@ final class ChooseCategoryViewController: UIViewController {
             self?.сategories = сategories
             self?.сategoryTableView.reloadData()
         }
+        
+        viewModel.onPreviousChosenCategoryStateChange = { [weak self] previousChosenCategory in
+            self?.previousChosenCategory = previousChosenCategory
+        }
     }
     
     private func setup() {
         viewModel?.fetchCategories()
+        viewModel?.setupPreviousChosenCategory()
         
         setupView()
         setupTableView()
@@ -129,6 +136,19 @@ final class ChooseCategoryViewController: UIViewController {
         placeholderView.isHidden = !isHidden
     }
     
+    private func selectCell(at indexPath: IndexPath, in tableView: UITableView) {
+        guard let cell = tableView.cellForRow(at: indexPath) else { return }
+        
+        let checkmark = UIImageView(image: UIImage(systemName: "checkmark"))
+        checkmark.tintColor = .ypBlue
+        cell.accessoryView = checkmark
+    }
+    
+    private func deselectCell(at indexPath: IndexPath, in tableView: UITableView) {
+        guard let cell = tableView.cellForRow(at: indexPath) else { return }
+        cell.accessoryView = .none
+    }
+    
     @objc private func createCategoryButtonTapped() {
         let createCategoryViewController = CreateCategoryViewController()
         present(createCategoryViewController, animated: true)
@@ -147,10 +167,18 @@ extension ChooseCategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
+        cell.accessoryView = .none
         cell.backgroundColor = UIColor(named: "YP BackgroundDay")
         cell.tintColor = UIColor(named: "YP Black")
         cell.textLabel?.text = сategories[indexPath.row].title
         cell.selectionStyle = .none
+        
+        if previousChosenCategory?.title == сategories[indexPath.row].title {
+            let checkmark = UIImageView(image: UIImage(systemName: "checkmark"))
+            checkmark.tintColor = .ypBlue
+            cell.accessoryView = checkmark
+            tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        }
         
         cell.roundCorners(for: indexPath, in: tableView, totalRows: сategories.count, with: 16)
         
@@ -166,18 +194,12 @@ extension ChooseCategoryViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) else { return }
-        
-        let checkmark = UIImageView(image: UIImage(systemName: "checkmark"))
-        checkmark.tintColor = .ypBlue
-        cell.accessoryView = checkmark
-        
+        selectCell(at: indexPath, in: tableView)
         viewModel?.chosenCategory(сategories[indexPath.row])
+        dismiss(animated: true)
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) else { return }
-        cell.accessoryView = .none
-        viewModel?.chosenCategory(nil)
+        deselectCell(at: indexPath, in: tableView)
     }
 }
