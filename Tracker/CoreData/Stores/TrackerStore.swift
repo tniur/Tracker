@@ -58,14 +58,7 @@ final class TrackerStore: NSObject {
     // MARK: - Methods
     
     func addNewTracker(_ tracker: Tracker, _ category: TrackerCategory) throws {
-        let trackerCoreData = TrackerCoreData(context: context)
-        trackerCoreData.id = tracker.id
-        trackerCoreData.name = tracker.name
-        trackerCoreData.color = tracker.color
-        trackerCoreData.emoji = tracker.emoji
-        trackerCoreData.timetable = tracker.timetable as NSObject
-        
-        try trackerCategoryStore.addTrackerToCategory(categoryTitle: category.title, tracker: trackerCoreData)
+        try trackerCategoryStore.addTrackerToCategory(category: category, tracker: tracker)
         
         try context.save()
     }

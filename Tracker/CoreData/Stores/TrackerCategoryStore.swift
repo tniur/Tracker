@@ -55,13 +55,20 @@ final class TrackerCategoryStore: NSObject {
     
     // MARK: - Methods
     
-    func addTrackerToCategory(categoryTitle: String, tracker: TrackerCoreData) throws {
+    func addTrackerToCategory(category: TrackerCategory, tracker: Tracker) throws {
         let fetchRequest = TrackerCategoryCoreData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
+        fetchRequest.predicate = NSPredicate(format: "title == %@", category.title)
         fetchRequest.fetchLimit = 1
         let categoriesCoreData = try context.fetch(fetchRequest)
         
-        tracker.category = categoriesCoreData.first
+        let trackerCoreData = TrackerCoreData(context: context)
+        trackerCoreData.id = tracker.id
+        trackerCoreData.name = tracker.name
+        trackerCoreData.color = tracker.color
+        trackerCoreData.emoji = tracker.emoji
+        trackerCoreData.timetable = tracker.timetable as NSObject
+        
+        trackerCoreData.category = categoriesCoreData.first
     }
     
     func getCategories() throws -> [TrackerCategory] {

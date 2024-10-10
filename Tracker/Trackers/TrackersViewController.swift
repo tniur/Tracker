@@ -59,7 +59,7 @@ final class TrackersViewController: UIViewController {
         setupTargets()
         
         trackerManager.delegate = self
-        trackerManager.filterTrackers()
+        trackerManager.filterCategories()
     }
     
     private func setupView() {
@@ -118,7 +118,7 @@ final class TrackersViewController: UIViewController {
     
     @objc func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
-        trackerManager.filterTrackers()
+        trackerManager.filterCategories()
     }
     
     @objc private func addButtonTapped() {
@@ -152,9 +152,8 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let number = trackerManager.getNumbersOfTrackers()
+        let number = trackerManager.getNumbersOfTrackersInCategory(in: section)
         
-        // TODO: Improve this after add Categories
         changeCollectionViewDisplay(isHidden: section == 0 && number == 0)
         
         return number
@@ -192,7 +191,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
             return UICollectionReusableView()
         }
         
-        header.titleLabel.text = "Работа"
+        header.titleLabel.text = trackerManager.getCategoryTitle(in: indexPath.section)
         
         return header
     }
