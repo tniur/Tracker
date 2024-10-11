@@ -17,8 +17,6 @@ final class ChooseCategoryViewController: UIViewController {
     
     private var сategories: [TrackerCategory] = []
     
-    private let сategoryTableViewCellHeight: CGFloat = 75
-    
     // MARK: - View
     
     private let titleLabel: UILabel = {
@@ -33,8 +31,7 @@ final class ChooseCategoryViewController: UIViewController {
     
     private let сategoryTableView: UITableView = {
         let tableView = UITableView()
-        tableView.separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
-        tableView.separatorColor = UIColor(named: "YP Gray")
+        tableView.separatorStyle = .none
         return tableView
     }()
     
@@ -106,7 +103,7 @@ final class ChooseCategoryViewController: UIViewController {
         сategoryTableView.dataSource = self
         сategoryTableView.delegate = self
         сategoryTableView.isMultipleTouchEnabled = false
-        сategoryTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        сategoryTableView.register(ChooseCategoryCell.self, forCellReuseIdentifier: ChooseCategoryCell.reuseId)
     }
     
     private func setupConstraints() {
@@ -136,19 +133,6 @@ final class ChooseCategoryViewController: UIViewController {
         placeholderView.isHidden = !isHidden
     }
     
-    private func selectCell(at indexPath: IndexPath, in tableView: UITableView) {
-        guard let cell = tableView.cellForRow(at: indexPath) else { return }
-        
-        let checkmark = UIImageView(image: UIImage(systemName: "checkmark"))
-        checkmark.tintColor = .ypBlue
-        cell.accessoryView = checkmark
-    }
-    
-    private func deselectCell(at indexPath: IndexPath, in tableView: UITableView) {
-        guard let cell = tableView.cellForRow(at: indexPath) else { return }
-        cell.accessoryView = .none
-    }
-    
     @objc private func createCategoryButtonTapped() {
         let createCategoryViewController = CreateCategoryViewController()
         present(createCategoryViewController, animated: true)
@@ -158,7 +142,6 @@ final class ChooseCategoryViewController: UIViewController {
 // MARK: - UITableViewDataSource
 
 extension ChooseCategoryViewController: UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         changeTableViewDisplay(isHidden: сategories.isEmpty)
         
@@ -166,22 +149,24 @@ extension ChooseCategoryViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        cell.accessoryView = .none
-        cell.backgroundColor = UIColor(named: "YP BackgroundDay")
-        cell.tintColor = UIColor(named: "YP Black")
-        cell.textLabel?.text = сategories[indexPath.row].title
-        cell.selectionStyle = .none
-        
-        if previousChosenCategory?.title == сategories[indexPath.row].title {
-            let checkmark = UIImageView(image: UIImage(systemName: "checkmark"))
-            checkmark.tintColor = .ypBlue
-            cell.accessoryView = checkmark
-            tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChooseCategoryCell.reuseId, for: indexPath) as? ChooseCategoryCell else {
+            return UITableViewCell()
         }
         
-        cell.roundCorners(for: indexPath, in: tableView, totalRows: сategories.count, with: 16)
+        cell.prepareForReuse()
+        cell.selectionStyle = .none
+        cell.configure(title: сategories[indexPath.row].title)
+        
+        if indexPath.row == 0 {
+            cell.isFirst()
+        }
+        if indexPath.row == сategories.count - 1 {
+            cell.isLast()
+        }
+        
+        if previousChosenCategory?.title == сategories[indexPath.row].title {
+            tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        }
         
         return cell
     }
@@ -191,16 +176,11 @@ extension ChooseCategoryViewController: UITableViewDataSource {
 
 extension ChooseCategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return сategoryTableViewCellHeight
+        return ChooseCategoryCell.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectCell(at: indexPath, in: tableView)
         viewModel?.chosenCategory(сategories[indexPath.row])
         dismiss(animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        deselectCell(at: indexPath, in: tableView)
     }
 }
