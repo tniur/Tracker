@@ -12,7 +12,6 @@ extension UITableViewCell {
     func roundCorners(for indexPath: IndexPath, in tableView: UITableView, totalRows: Int, with radius: CGFloat) {
         self.layer.cornerRadius = radius
         self.layer.masksToBounds = true
-        self.separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         
         var corners: CACornerMask = []
         

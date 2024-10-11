@@ -158,6 +158,7 @@ final class ChooseCategoryViewController: UIViewController {
 // MARK: - UITableViewDataSource
 
 extension ChooseCategoryViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         changeTableViewDisplay(isHidden: сategories.isEmpty)
         
