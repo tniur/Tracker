@@ -49,6 +49,12 @@ final class OnboardingPageViewController: UIPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setup()
+    }
+    
+    // MARK: - Methods
+    
+    private func setup() {
         dataSource = self
         delegate = self
         
@@ -70,8 +76,6 @@ final class OnboardingPageViewController: UIPageViewController {
         
         scipOnboardingButton.addTarget(self, action: #selector(scipOnboardingButtonTapped), for: .touchUpInside)
     }
-    
-    // MARK: - Methods
     
     @objc private func scipOnboardingButtonTapped() {
         UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")

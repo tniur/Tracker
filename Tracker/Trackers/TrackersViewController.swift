@@ -116,7 +116,7 @@ final class TrackersViewController: UIViewController {
         return calendar.compare(firstDate, to: secondDate, toGranularity: .day)
     }
     
-    @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         trackerManager.filterCategories()
     }
