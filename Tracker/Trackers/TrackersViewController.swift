@@ -241,7 +241,7 @@ extension TrackersViewController: TrackerManagerDelegate {
     
     func getCurrentWeekDay() -> WeekDay? {
         dateFormatter.dateFormat = "EEEE"
-        
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         let currentDateString = dateFormatter.string(from: currentDate)
         let currentWeekDay = WeekDay.getWeekDayFrom(dayName: currentDateString)
         return currentWeekDay
