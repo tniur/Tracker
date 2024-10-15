@@ -92,14 +92,11 @@ final class TrackerCell: UICollectionViewCell {
         titleLabel.text = title
         emojiLabel.text = emoji
         
-        switch record % 10 {
-        case 1:
-            recordLabel.text = "\(record) день"
-        case 2,3,4:
-            recordLabel.text = "\(record) дня"
-        default:
-            recordLabel.text = "\(record) дней"
-        }
+        let recordString = String.localizedStringWithFormat(
+            NSLocalizedString("numberOfDays", comment: "Number of record days"),
+            record
+        )
+        recordLabel.text = recordString
         
         if isChecked {
             doneButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
