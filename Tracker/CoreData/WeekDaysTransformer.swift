@@ -18,8 +18,8 @@ final class WeekDaysTransformer: ValueTransformer {
     }
     
     override func reverseTransformedValue(_ value: Any?) -> Any? {
-        guard let data = value as? NSData else { return nil }
-        return try? JSONDecoder().decode([WeekDay].self, from: data as Data)
+        guard let data = value as? Data else { return nil }
+        return try? JSONDecoder().decode([WeekDay].self, from: data)
     }
     
     static func register() {
