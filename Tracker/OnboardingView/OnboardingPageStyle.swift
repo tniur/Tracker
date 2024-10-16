@@ -20,8 +20,8 @@ enum OnboardingPageStyle {
     
     var title: String? {
         switch self {
-        case .firstPage: return "Отслеживайте только то, что хотите"
-        case .secontPage: return "Даже если это не литры воды и йога"
+        case .firstPage: return NSLocalizedString("onboardingText.first", comment: "Onboarding text")
+        case .secontPage: return NSLocalizedString("onboardingText.second", comment: "Onboarding text")
         }
     }
 }

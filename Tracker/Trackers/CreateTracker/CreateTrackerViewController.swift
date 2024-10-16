@@ -23,8 +23,8 @@ final class CreateTrackerViewController: UIViewController {
     private let trackerStore = TrackerStore()
     
     private let collectionViewSections: [CollectionSection] = [
-        CollectionSection(title: "Emoji", items: Constants.trackerEmoji),
-        CollectionSection(title: "Цвет", items: Constants.trackerColours)
+        CollectionSection(title: NSLocalizedString("emoji", comment: "emoji"), items: Constants.trackerEmoji),
+        CollectionSection(title: NSLocalizedString("color", comment: "color"), items: Constants.trackerColours)
     ]
     
     // MARK: - View
@@ -46,7 +46,7 @@ final class CreateTrackerViewController: UIViewController {
     
     private let trackerTitleTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("enterTrackerName", comment: "color")
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         textField.textColor = .ypBlack
         textField.backgroundColor = UIColor(named: "YP BackgroundDay")
@@ -83,7 +83,7 @@ final class CreateTrackerViewController: UIViewController {
     
     private let cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("cancel", comment: "cancel button"), for: .normal)
         button.setTitleColor(UIColor(named: "YP Red"), for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .white
@@ -95,7 +95,7 @@ final class CreateTrackerViewController: UIViewController {
     
     private let createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Cоздать", for: .normal)
+        button.setTitle(NSLocalizedString("create", comment: "create button"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.isEnabled = false
@@ -111,11 +111,11 @@ final class CreateTrackerViewController: UIViewController {
         
         switch trackerType {
         case .habbit:
-            titleLabel.text = "Новая привычка"
-            trackerSettingsCategory = ["Категория", "Расписание"]
+            titleLabel.text = NSLocalizedString("newHabbit", comment: "New habbit")
+            trackerSettingsCategory = [NSLocalizedString("category", comment: "Сategory"), NSLocalizedString("schedule", comment: "Сategory")]
         case .event:
-            titleLabel.text = "Новое нерегулярное событие"
-            trackerSettingsCategory = ["Категория"]
+            titleLabel.text = NSLocalizedString("newIrregular", comment: "Сategory")
+            trackerSettingsCategory = [NSLocalizedString("category", comment: "Сategory")]
         }
         
         super.init(nibName: nil, bundle: nil)
@@ -314,9 +314,9 @@ extension CreateTrackerViewController: UITableViewDataSource, UITableViewDelegat
         case 1:
             if !timetable.isEmpty {
                 if timetable.count == 7 {
-                    cell.detailTextLabel?.text = "Каждый день"
+                    cell.detailTextLabel?.text = NSLocalizedString("daily", comment: "Daily")
                 } else {
-                    let text = timetable.map { String($0.rawValue) }.joined(separator: ", ")
+                    let text = timetable.map { String($0.localized) }.joined(separator: ", ")
                     cell.detailTextLabel?.text = text
                 }
             }

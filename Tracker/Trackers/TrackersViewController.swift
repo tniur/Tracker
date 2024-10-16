@@ -30,7 +30,7 @@ final class TrackersViewController: UIViewController {
         return datePicker
     }()
     
-    private let placeholderView = PlaceholderView(frame: CGRect.zero, title: "Что будем отслеживать?", image: UIImage(named: "empty_placeholder"))
+    private let placeholderView = PlaceholderView(frame: CGRect.zero, title: NSLocalizedString("whatGoingToTrack", comment: "Track goals"), image: UIImage(named: "empty_placeholder"))
     
     private let trackersCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -90,7 +90,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func setupSearchBar() {
-        searchBar.placeholder = "Поиск"
+        searchBar.placeholder = NSLocalizedString("search", comment: "Search")
         searchBar.delegate = self
         searchBar.searchBarStyle = .minimal
         searchBar.showsCancelButton = false
@@ -127,7 +127,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func navigationBarConfigure() {
-        navigationItem.title = "Трекеры"
+        navigationItem.title = NSLocalizedString("trackers", comment: "Trackers")
         navigationController?.navigationBar.prefersLargeTitles = true
         
         let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addButtonTapped))

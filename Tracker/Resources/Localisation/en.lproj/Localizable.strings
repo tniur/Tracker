@@ -1,0 +1,61 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Pavel Bobkov on 16.10.2024.
+  
+*/
+
+"trackers" = "Trackers";
+"statistics" = "Statistics";
+
+"monday" = "Monday";
+"tuesday" = "Tuesday";
+"wednesday" = "Wednesday";
+"thursday" = "Thursday";
+"friday" = "Friday";
+"saturday" = "Saturday";
+"sunday" = "Sunday";
+
+"monday.short" = "Mn";
+"tuesday.short" = "Ts";
+"wednesday.short" = "Wd";
+"thursday.short" = "Th";
+"friday.short" = "Fr";
+"saturday.short" = "St";
+"sunday.short" = "Sn";
+
+"daily" = "Daily";
+
+"search" = "Search";
+
+"emoji" = "Emoji";
+"color" = "Color";
+
+"create" = "Create";
+"cancel" = "Cancel";
+"done" = "Done";
+
+"newHabbit" = "New habbit";
+"newIrregular" = "New irregular event";
+"newCategory" = "New category";
+
+"category" = "Category";
+"schedule" = "Schedule";
+
+"creatingTracker" = "Creating a tracker";
+"enterTrackerName" = "Enter tracker name";
+
+"habbit" = "Habbit";
+"irregularEvent" = "An irregular event";
+
+"addCategory" = "Add category";
+"enterCategoryName" = "Enter category name";
+
+"whatGoingToTrack" = "What are we going to track?";
+
+"habitsAndEventsCombinedInfo" = "Habits and events can be \ncombined in meaning";
+
+"onboardingText.first" = "Track only what you want";
+"onboardingText.second" = "Even if it's not liters of water and yoga";
+"onboardingSkip" = "These are the technologies!";

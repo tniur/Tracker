@@ -22,12 +22,12 @@ final class ChooseCategoryViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.text = "Категория"
+        label.text = NSLocalizedString("category", comment: "Category")
         label.textColor = .ypBlack
         return label
     }()
     
-    private let placeholderView = PlaceholderView(frame: CGRect.zero, title: "Привычки и события можно \nобъединить по смыслу", image: UIImage(named: "empty_placeholder"))
+    private let placeholderView = PlaceholderView(frame: CGRect.zero, title: NSLocalizedString("habitsAndEventsCombinedInfo", comment: "Habits and events combined info"), image: UIImage(named: "empty_placeholder"))
     
     private let сategoryTableView: UITableView = {
         let tableView = UITableView()
@@ -37,7 +37,7 @@ final class ChooseCategoryViewController: UIViewController {
     
     private let createCategoryButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("addCategory", comment: "Add category"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack

@@ -34,7 +34,7 @@ final class TimetableViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = NSLocalizedString("schedule", comment: "Schedule")
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = UIColor(named: "YP Black")
         return label
@@ -52,7 +52,7 @@ final class TimetableViewController: UIViewController {
     
     private let doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("done", comment: "Done button"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = UIColor(named: "YP Black")

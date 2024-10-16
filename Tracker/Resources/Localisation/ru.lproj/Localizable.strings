@@ -1,0 +1,61 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Pavel Bobkov on 16.10.2024.
+  
+*/
+
+"trackers" = "Трекеры";
+"statistics" = "Статистика";
+
+"monday" = "Понедельник";
+"tuesday" = "Вторник";
+"wednesday" = "Среда";
+"thursday" = "Четверг";
+"friday" = "Пятница";
+"saturday" = "Суббота";
+"sunday" = "Воскресенье";
+
+"monday.short" = "Пн";
+"tuesday.short" = "Вт";
+"wednesday.short" = "Ср";
+"thursday.short" = "Чт";
+"friday.short" = "Пт";
+"saturday.short" = "Сб";
+"sunday.short" = "Вс";
+
+"daily" = "Каждый день";
+
+"search" = "Поиск";
+
+"emoji" = "Emoji";
+"color" = "Цвет";
+
+"create" = "Создать";
+"cancel" = "Отменить";
+"done" = "Готово";
+
+"newHabbit" = "Новая привычка";
+"newIrregular" = "Новое нерегулярное событие";
+"newCategory" = "Новая категория";
+
+"category" = "Категория";
+"schedule" = "Расписание";
+
+"creatingTracker" = "Создание трекера";
+"enterTrackerName" = "Введите название трекера";
+
+"habbit" = "Привычка";
+"irregularEvent" = "Нерегулярные событие";
+
+"addCategory" = "Добавить категорию";
+"enterCategoryName" = "Введите название категории";
+
+"whatGoingToTrack" = "Что будем отслеживать?";
+
+"habitsAndEventsCombinedInfo" = "Привычки и события можно \nобъединить по смыслу";
+
+"onboardingText.first" = "Отслеживайте только то, что хотите";
+"onboardingText.second" = "Даже если это не литры воды и йога";
+"onboardingSkip" = "Вот это технологии!";
