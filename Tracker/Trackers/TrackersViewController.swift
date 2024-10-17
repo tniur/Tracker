@@ -21,7 +21,7 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - View
     
-    private let searchBar = UISearchBar()
+    private let searchTextField = UISearchTextField()
     
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -52,7 +52,7 @@ final class TrackersViewController: UIViewController {
     
     private func setup() {
         navigationBarConfigure()
-        setupSearchBar()
+        setupSearchTextField()
         setupView()
         setupConstraints()
         setupCollection()
@@ -63,7 +63,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func setupView() {
-        [searchBar, placeholderView, trackersCollection].forEach {
+        [searchTextField, placeholderView, trackersCollection].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -73,27 +73,26 @@ final class TrackersViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            searchTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            searchTextField.heightAnchor.constraint(equalToConstant: 36),
             
             placeholderView.topAnchor.constraint(equalTo: trackersCollection.topAnchor),
             placeholderView.bottomAnchor.constraint(equalTo: trackersCollection.bottomAnchor),
             placeholderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             placeholderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            trackersCollection.topAnchor.constraint(equalTo: searchTextField.bottomAnchor),
             trackersCollection.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackersCollection.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
     
-    private func setupSearchBar() {
-        searchBar.placeholder = NSLocalizedString("search", comment: "Search")
-        searchBar.delegate = self
-        searchBar.searchBarStyle = .minimal
-        searchBar.showsCancelButton = false
+    private func setupSearchTextField() {
+        searchTextField.placeholder = NSLocalizedString("search", comment: "Search")
+        searchTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapGesture.cancelsTouchesInView = false
@@ -124,6 +123,10 @@ final class TrackersViewController: UIViewController {
     @objc private func addButtonTapped() {
         let chooseTrackerTypeViewController = ChooseTrackerTypeViewController()
         present(chooseTrackerTypeViewController, animated: true)
+    }
+    
+    @objc private func textFieldDidChange(_ searchField: UISearchTextField) {
+        trackerManager.filterCategories()
     }
     
     private func navigationBarConfigure() {
@@ -235,6 +238,14 @@ extension TrackersViewController: UISearchBarDelegate {
 // MARK: - TrackerCellDelegate
 
 extension TrackersViewController: TrackerManagerDelegate {
+    func getSearchedWord() -> String? {
+        if let searchText = searchTextField.text, !searchText.isEmpty {
+            return searchText
+        } else {
+            return nil
+        }
+    }
+    
     func didUpdate() {
         trackersCollection.reloadData()
     }

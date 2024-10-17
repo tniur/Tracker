@@ -10,6 +10,7 @@ import UIKit
 protocol TrackerManagerDelegate: AnyObject {
     func didUpdate()
     func getCurrentWeekDay() -> WeekDay?
+    func getSearchedWord() -> String?
 }
 
 final class TrackerManager {
@@ -51,15 +52,17 @@ final class TrackerManager {
         do {
             let categories = try trackerCategoryStore.getCategories()
             guard let weekDay = delegate?.getCurrentWeekDay() else { return }
+            let searchedWord = delegate?.getSearchedWord()?.lowercased()
             
             let filteredCategories = categories.compactMap { category -> TrackerCategory? in
                 let filteredTrackers = category.trackers.filter { tracker in
-                    tracker.timetable.isEmpty || tracker.timetable.contains(weekDay)
+                    (tracker.timetable.isEmpty || tracker.timetable.contains(weekDay))
+                    && (tracker.name.lowercased().contains(searchedWord ?? "") || (searchedWord == nil))
                 }
                 
                 return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
             }
-            
+        
             filtredCategories = filteredCategories
             delegate?.didUpdate()
         } catch {
