@@ -53,9 +53,14 @@
 "enterCategoryName" = "Введите название категории";
 
 "whatGoingToTrack" = "Что будем отслеживать?";
-
+"nothingToAnalyze" = "Анализировать пока нечего";
 "habitsAndEventsCombinedInfo" = "Привычки и события можно \nобъединить по смыслу";
 
 "onboardingText.first" = "Отслеживайте только то, что хотите";
 "onboardingText.second" = "Даже если это не литры воды и йога";
 "onboardingSkip" = "Вот это технологии!";
+
+"bestPeriod" = "Лучший период";
+"perfectDays" = "Идеальные дни";
+"trackersCompleted" = "Трекеров завершено";
+"averageValue" = "Среднее значение";

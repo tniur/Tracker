@@ -15,6 +15,7 @@ final class TabBarController: UITabBarController {
         let statisticsViewController = StatisticsViewController()
         
         let trackersViewNavigationController = UINavigationController(rootViewController: trackersViewController)
+        let statisticsViewNavigationController = UINavigationController(rootViewController: statisticsViewController)
         
         trackersViewController.tabBarItem = UITabBarItem(
             title: NSLocalizedString("trackers", comment: "Trackers"),
@@ -31,6 +32,6 @@ final class TabBarController: UITabBarController {
         self.tabBar.layer.borderWidth = 1
         self.tabBar.layer.borderColor = UIColor(named: "YP LightGray")?.cgColor
         
-        self.viewControllers = [trackersViewNavigationController, statisticsViewController]
+        self.viewControllers = [trackersViewNavigationController, statisticsViewNavigationController]
     }
 }

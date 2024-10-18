@@ -80,6 +80,11 @@ final class TrackerRecordStore {
         }
     }
     
+    func getRecordsCount() throws -> Int {
+        let fetchRequest = TrackerRecordCoreData.fetchRequest()
+        return try context.count(for: fetchRequest)
+    }
+    
     private func getRecord(byId id: UUID, date: Date) throws -> TrackerRecordCoreData? {
         let startOfDay = Calendar.current.startOfDay(for: date)
         guard let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay) else { return nil }

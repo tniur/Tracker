@@ -53,9 +53,14 @@
 "enterCategoryName" = "Enter category name";
 
 "whatGoingToTrack" = "What are we going to track?";
-
+"nothingToAnalyze" = "There is nothing to analyze yet";
 "habitsAndEventsCombinedInfo" = "Habits and events can be \ncombined in meaning";
 
 "onboardingText.first" = "Track only what you want";
 "onboardingText.second" = "Even if it's not liters of water and yoga";
 "onboardingSkip" = "These are the technologies!";
+
+"bestPeriod" = "Best period";
+"perfectDays" = "Perfect days";
+"trackersCompleted" = "Trackers completed";
+"averageValue" = "Average value";
