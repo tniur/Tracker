@@ -71,3 +71,5 @@
 "trackersForToday" = "Trackers tor today";
 "completedTrackers" = "Completed trackers";
 "notCompletedTrackers" = "Not completed trackers";
+
+"nothingFound" = "Nothing was found";

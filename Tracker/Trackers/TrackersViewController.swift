@@ -32,6 +32,8 @@ final class TrackersViewController: UIViewController {
     
     private let placeholderView = PlaceholderView(frame: CGRect.zero, title: NSLocalizedString("whatGoingToTrack", comment: "Track goals"), image: UIImage(named: "empty_placeholder"))
     
+    private let filterPlaceholderView = PlaceholderView(frame: CGRect.zero, title: NSLocalizedString("nothingFound", comment: "Nothing found"), image: UIImage(named: "nothing_found"))
+    
     private let trackersCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
@@ -72,7 +74,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func setupView() {
-        [searchTextField, placeholderView, trackersCollection, filtersButton].forEach {
+        [searchTextField, placeholderView, trackersCollection, filtersButton, filterPlaceholderView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -89,6 +91,11 @@ final class TrackersViewController: UIViewController {
             placeholderView.bottomAnchor.constraint(equalTo: trackersCollection.bottomAnchor),
             placeholderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             placeholderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            filterPlaceholderView.topAnchor.constraint(equalTo: trackersCollection.topAnchor),
+            filterPlaceholderView.bottomAnchor.constraint(equalTo: trackersCollection.bottomAnchor),
+            filterPlaceholderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            filterPlaceholderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             trackersCollection.topAnchor.constraint(equalTo: searchTextField.bottomAnchor),
             trackersCollection.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -148,6 +155,10 @@ final class TrackersViewController: UIViewController {
         trackerManager.filterCategories()
     }
     
+    @objc func hideKeyboard() {
+        view.endEditing(true)
+    }
+    
     private func navigationBarConfigure() {
         navigationItem.title = NSLocalizedString("trackers", comment: "Trackers")
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -160,9 +171,19 @@ final class TrackersViewController: UIViewController {
     }
     
     private func changeCollectionViewDisplay(isHidden: Bool) {
+        filterPlaceholderView.isHidden = true
+        placeholderView.isHidden = true
+        
         trackersCollection.isHidden = isHidden
         filtersButton.isHidden = isHidden
-        placeholderView.isHidden = !isHidden
+        
+        if isHidden {
+            if let _ = getSearchedWord() {
+                filterPlaceholderView.isHidden = false
+            } else {
+                placeholderView.isHidden = false
+            }
+        }
     }
 }
 
@@ -263,21 +284,7 @@ extension TrackersViewController: TrackerCellDelegate {
     }
 }
 
-// MARK: - UISearchBarDelegate
-
-extension TrackersViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) { }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-    
-    @objc func hideKeyboard() {
-        view.endEditing(true)
-    }
-}
-
-// MARK: - TrackerCellDelegate
+// MARK: - TrackerManagerDelegate
 
 extension TrackersViewController: TrackerManagerDelegate {
     func getSearchedWord() -> String? {
