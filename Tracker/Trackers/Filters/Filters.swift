@@ -16,4 +16,22 @@ enum Filters: String, Codable {
     func localised() -> String {
         NSLocalizedString(self.rawValue, comment: "Filters")
     }
+    
+    func saveToUserDefaults() {
+        if let encoded = try? JSONEncoder().encode(self) {
+            UserDefaults.standard.set(encoded, forKey: "trackersFilter")
+        }
+    }
+    
+    static func getFromUserDefaults() -> Filters {
+        if let savedFilter = UserDefaults.standard.data(forKey: "trackersFilter") {
+            do {
+                return try JSONDecoder().decode(Filters.self, from: savedFilter)
+            } catch {
+                return .all
+            }
+        } else {
+            return .all
+        }
+    }
 }

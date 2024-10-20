@@ -11,6 +11,8 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Properties
     
+    private var chosenFilter = Filters.getFromUserDefaults()
+    
     private var currentDate: Date = Date()
     
     private let trackerManager = TrackerManager()
@@ -74,7 +76,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func setupView() {
-        [searchTextField, placeholderView, trackersCollection, filtersButton, filterPlaceholderView].forEach {
+        [searchTextField, placeholderView, filterPlaceholderView, trackersCollection, filtersButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -173,15 +175,20 @@ final class TrackersViewController: UIViewController {
     private func changeCollectionViewDisplay(isHidden: Bool) {
         filterPlaceholderView.isHidden = true
         placeholderView.isHidden = true
+        filtersButton.isHidden = false
         
         trackersCollection.isHidden = isHidden
-        filtersButton.isHidden = isHidden
         
         if isHidden {
-            if let _ = getSearchedWord() {
-                filterPlaceholderView.isHidden = false
+            if chosenFilter == .all || chosenFilter == .today {
+                if getSearchedWord() != nil {
+                    filterPlaceholderView.isHidden = false
+                } else {
+                    placeholderView.isHidden = false
+                    filtersButton.isHidden = true
+                }
             } else {
-                placeholderView.isHidden = false
+                filterPlaceholderView.isHidden = false
             }
         }
     }
@@ -306,10 +313,27 @@ extension TrackersViewController: TrackerManagerDelegate {
         let currentWeekDay = WeekDay.getWeekDayFrom(dayName: currentDateString)
         return currentWeekDay
     }
+    
+    func getFilter() -> Filters {
+        chosenFilter
+    }
+    
+    func getCurrentDate() -> Date {
+        currentDate
+    }
 }
 
 // MARK: - FiltersViewControllerDelegate
 
 extension TrackersViewController: FiltersViewControllerDelegate {
-    func didSelectFilter(_ filter: Filters) { }
+    func didSelectFilter(_ filter: Filters) {
+        chosenFilter = filter
+        
+        if filter == .today {
+            datePicker.setDate(Date(), animated: true)
+            datePicker.sendActions(for: .valueChanged)
+        } else {
+            trackerManager.filterCategories()
+        }
+    }
 }

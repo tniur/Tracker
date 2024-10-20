@@ -10,7 +10,9 @@ import UIKit
 protocol TrackerManagerDelegate: AnyObject {
     func didUpdate()
     func getCurrentWeekDay() -> WeekDay?
+    func getCurrentDate() -> Date
     func getSearchedWord() -> String?
+    func getFilter() -> Filters
 }
 
 final class TrackerManager {
@@ -22,6 +24,8 @@ final class TrackerManager {
     private var filtredCategories: [TrackerCategory] = []
     
     private let trackerCategoryStore = TrackerCategoryStore()
+    
+    private let trackerRecordStore = TrackerRecordStore()
     
     // MARK: - Life-Cycle
     
@@ -51,18 +55,23 @@ final class TrackerManager {
     func filterCategories() {
         do {
             let categories = try trackerCategoryStore.getCategories()
-            guard let weekDay = delegate?.getCurrentWeekDay() else { return }
+            guard let weekDay = delegate?.getCurrentWeekDay(),
+                  let currentDate = delegate?.getCurrentDate() else { return }
             let searchedWord = delegate?.getSearchedWord()?.lowercased()
+            let filter = delegate?.getFilter()
             
             let filteredCategories = categories.compactMap { category -> TrackerCategory? in
                 let filteredTrackers = category.trackers.filter { tracker in
                     (tracker.timetable.isEmpty || tracker.timetable.contains(weekDay))
                     && (tracker.name.lowercased().contains(searchedWord ?? "") || (searchedWord == nil))
+                    && (filter == .all || filter == .today
+                        || (filter == .completed && trackerRecordStore.isRecordExists(trackerId: tracker.id, date: currentDate))
+                        || (filter == .notCompleted && !trackerRecordStore.isRecordExists(trackerId: tracker.id, date: currentDate)))
                 }
                 
                 return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
             }
-        
+            
             filtredCategories = filteredCategories
             delegate?.didUpdate()
         } catch {

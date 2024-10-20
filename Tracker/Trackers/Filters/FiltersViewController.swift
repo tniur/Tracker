@@ -17,7 +17,7 @@ final class FiltersViewController: UIViewController {
     
     weak var delegate: FiltersViewControllerDelegate?
     
-    private var selectedFilter: Filters?
+    private var selectedFilter: Filters = Filters.getFromUserDefaults()
     
     private let filters: [Filters] = [.all, .today, .completed, .notCompleted]
     
@@ -50,7 +50,6 @@ final class FiltersViewController: UIViewController {
         setupView()
         setupTableView()
         setupConstraints()
-        getSelectedFilter()
     }
     
     private func setupView() {
@@ -79,24 +78,6 @@ final class FiltersViewController: UIViewController {
         filtersTableView.delegate = self
         filtersTableView.isMultipleTouchEnabled = false
         filtersTableView.register(ChooseItemCell.self, forCellReuseIdentifier: ChooseItemCell.reuseId)
-    }
-    
-    private func getSelectedFilter() {
-        if let savedFilter = UserDefaults.standard.data(forKey: "trackersFilter") {
-            do {
-                selectedFilter = try JSONDecoder().decode(Filters.self, from: savedFilter)
-            } catch {
-                selectedFilter = .all
-            }
-        } else {
-            selectedFilter = .all
-        }
-    }
-    
-    private func saveSelectedFilter(by index: Int) {
-        if let encoded = try? JSONEncoder().encode(filters[index]) {
-            UserDefaults.standard.set(encoded, forKey: "trackersFilter")
-        }
     }
 }
 
@@ -139,7 +120,8 @@ extension FiltersViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        saveSelectedFilter(by: indexPath.row)
+        filters[indexPath.row].saveToUserDefaults()
+        delegate?.didSelectFilter(filters[indexPath.row])
         dismiss(animated: true)
     }
 }
