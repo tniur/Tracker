@@ -64,3 +64,10 @@
 "perfectDays" = "Идеальные дни";
 "trackersCompleted" = "Трекеров завершено";
 "averageValue" = "Среднее значение";
+
+"filters" = "Фильтры";
+
+"allTrackers" = "Все трекеры";
+"trackersForToday" = "Трекеры на сегодня";
+"completedTrackers" = "Завершенные";
+"notCompletedTrackers" = "Не завершенные";

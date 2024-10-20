@@ -103,7 +103,7 @@ final class ChooseCategoryViewController: UIViewController {
         сategoryTableView.dataSource = self
         сategoryTableView.delegate = self
         сategoryTableView.isMultipleTouchEnabled = false
-        сategoryTableView.register(ChooseCategoryCell.self, forCellReuseIdentifier: ChooseCategoryCell.reuseId)
+        сategoryTableView.register(ChooseItemCell.self, forCellReuseIdentifier: ChooseItemCell.reuseId)
     }
     
     private func setupConstraints() {
@@ -149,7 +149,7 @@ extension ChooseCategoryViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChooseCategoryCell.reuseId, for: indexPath) as? ChooseCategoryCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChooseItemCell.reuseId, for: indexPath) as? ChooseItemCell else {
             return UITableViewCell()
         }
         
@@ -176,7 +176,7 @@ extension ChooseCategoryViewController: UITableViewDataSource {
 
 extension ChooseCategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ChooseCategoryCell.height
+        return ChooseItemCell.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

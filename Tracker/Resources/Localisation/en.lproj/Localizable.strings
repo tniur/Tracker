@@ -64,3 +64,10 @@
 "perfectDays" = "Perfect days";
 "trackersCompleted" = "Trackers completed";
 "averageValue" = "Average value";
+
+"filters" = "Filters";
+
+"allTrackers" = "All trackers";
+"trackersForToday" = "Trackers tor today";
+"completedTrackers" = "Completed trackers";
+"notCompletedTrackers" = "Not completed trackers";

@@ -40,6 +40,15 @@ final class TrackersViewController: UIViewController {
         return collecion
     }()
     
+    private let filtersButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(NSLocalizedString("filters", comment: "Filters"), for: .normal)
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = true
+        button.backgroundColor = .ypBlue
+        return button
+    }()
+    
     // MARK: - Life-Cycle
     
     override func viewDidLoad() {
@@ -63,12 +72,10 @@ final class TrackersViewController: UIViewController {
     }
     
     private func setupView() {
-        [searchTextField, placeholderView, trackersCollection].forEach {
+        [searchTextField, placeholderView, trackersCollection, filtersButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
-        trackersCollection.isHidden = true
     }
     
     private func setupConstraints() {
@@ -87,6 +94,11 @@ final class TrackersViewController: UIViewController {
             trackersCollection.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackersCollection.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filtersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filtersButton.heightAnchor.constraint(equalToConstant: 50),
+            filtersButton.widthAnchor.constraint(equalToConstant: 114),
         ])
     }
     
@@ -101,6 +113,7 @@ final class TrackersViewController: UIViewController {
     
     private func setupTargets() {
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        filtersButton.addTarget(self, action: #selector(filtersButtonAction), for: .touchUpInside)
     }
     
     private func setupCollection() {
@@ -113,6 +126,12 @@ final class TrackersViewController: UIViewController {
     private func compareDates(firstDate: Date, secondDate: Date) -> ComparisonResult {
         let calendar = Calendar.current
         return calendar.compare(firstDate, to: secondDate, toGranularity: .day)
+    }
+    
+    @objc private func filtersButtonAction() {
+        let filtersViewController = FiltersViewController()
+        filtersViewController.delegate = self
+        present(filtersViewController, animated: true)
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
@@ -142,6 +161,7 @@ final class TrackersViewController: UIViewController {
     
     private func changeCollectionViewDisplay(isHidden: Bool) {
         trackersCollection.isHidden = isHidden
+        filtersButton.isHidden = isHidden
         placeholderView.isHidden = !isHidden
     }
 }
@@ -151,12 +171,14 @@ final class TrackersViewController: UIViewController {
 extension TrackersViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        trackerManager.getNumbersOfCategories()
+        let number = trackerManager.getNumbersOfCategories()
+        changeCollectionViewDisplay(isHidden: number == 0)
+        
+        return number
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let number = trackerManager.getNumbersOfTrackersInCategory(in: section)
-        
         changeCollectionViewDisplay(isHidden: section == 0 && number == 0)
         
         return number
@@ -221,7 +243,27 @@ extension TrackersViewController: TrackerCellDelegate {
             }
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let scrollViewHeight = scrollView.frame.size.height
+        
+        if contentHeight != 0 && offsetY + scrollViewHeight >= contentHeight {
+            UIView.animate(withDuration: 0.5) { [weak self] in
+                self?.filtersButton.alpha = 0
+            }
+        }
+        
+        if offsetY + scrollViewHeight < contentHeight {
+            UIView.animate(withDuration: 0.5) { [weak self] in
+                self?.filtersButton.alpha = 1
+            }
+        }
+    }
 }
+
+// MARK: - UISearchBarDelegate
 
 extension TrackersViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) { }
@@ -257,4 +299,10 @@ extension TrackersViewController: TrackerManagerDelegate {
         let currentWeekDay = WeekDay.getWeekDayFrom(dayName: currentDateString)
         return currentWeekDay
     }
+}
+
+// MARK: - FiltersViewControllerDelegate
+
+extension TrackersViewController: FiltersViewControllerDelegate {
+    func didSelectFilter(_ filter: Filters) { }
 }
