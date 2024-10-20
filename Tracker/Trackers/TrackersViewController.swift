@@ -179,17 +179,11 @@ final class TrackersViewController: UIViewController {
         
         trackersCollection.isHidden = isHidden
         
-        if isHidden {
-            if chosenFilter == .all || chosenFilter == .today {
-                if getSearchedWord() != nil {
-                    filterPlaceholderView.isHidden = false
-                } else {
-                    placeholderView.isHidden = false
-                    filtersButton.isHidden = true
-                }
-            } else {
-                filterPlaceholderView.isHidden = false
-            }
+        if trackerManager.getAllTrackersCount() == 0 {
+            placeholderView.isHidden = false
+            filtersButton.isHidden = true
+        } else {
+            filterPlaceholderView.isHidden = false
         }
     }
 }

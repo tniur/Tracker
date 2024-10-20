@@ -21,6 +21,8 @@ final class TrackerManager {
     
     weak var delegate: TrackerManagerDelegate?
     
+    private var allTrackersCount: Int = 0
+    
     private var filtredCategories: [TrackerCategory] = []
     
     private let trackerCategoryStore = TrackerCategoryStore()
@@ -44,6 +46,10 @@ final class TrackerManager {
         filtredCategories[section].trackers.count
     }
     
+    func getAllTrackersCount() -> Int {
+        allTrackersCount
+    }
+    
     func getCategoryTitle(in section: Int) -> String {
         filtredCategories[section].title
     }
@@ -59,6 +65,10 @@ final class TrackerManager {
                   let currentDate = delegate?.getCurrentDate() else { return }
             let searchedWord = delegate?.getSearchedWord()?.lowercased()
             let filter = delegate?.getFilter()
+            
+            allTrackersCount = categories.flatMap { $0.trackers }
+                .filter { $0.timetable.isEmpty || $0.timetable.contains(weekDay) }
+                .count
             
             let filteredCategories = categories.compactMap { category -> TrackerCategory? in
                 let filteredTrackers = category.trackers.filter { tracker in
