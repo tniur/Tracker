@@ -104,6 +104,15 @@ final class TrackerStore: NSObject {
         try context.save()
     }
     
+    func getTrackerCategory(for tracker: Tracker) throws -> TrackerCategory? {
+        let trackerCoreData = try getTrackerById(tracker.id)
+        
+        guard let category = trackerCoreData?.category,
+              let categoryTitle = category.title else { return nil }
+        
+        return try trackerCategoryStore.getCategory(by: categoryTitle)
+    }
+    
     private func getTrackerById(_ id: UUID) throws -> TrackerCoreData? {
         let fetchRequest = TrackerCoreData.fetchRequest()
         

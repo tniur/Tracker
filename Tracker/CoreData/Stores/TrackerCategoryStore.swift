@@ -85,6 +85,21 @@ final class TrackerCategoryStore: NSObject {
         }
     }
     
+    func getCategory(by title: String) throws -> TrackerCategory? {
+        let fetchRequest = TrackerCategoryCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "title == %@", title)
+        fetchRequest.fetchLimit = 1
+        let categoriesCoreData = try context.fetch(fetchRequest)
+        
+        guard let category = categoriesCoreData.first,
+              let title = category.title,
+              let trackersCoreData = category.trackers?.allObjects as? [TrackerCoreData] else { return nil }
+        
+        let trackers = getTrackersFromTrackersCoreData(trackersCoreData: trackersCoreData)
+        
+        return TrackerCategory(title: title, trackers: trackers)
+    }
+    
     private func getCategoriesFromCategoriesCoreData(categoriesCoreData: [TrackerCategoryCoreData]) -> [TrackerCategory] {
         var categories: [TrackerCategory] = []
         categoriesCoreData.forEach {

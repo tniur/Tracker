@@ -265,7 +265,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(actionProvider: { _ in
             let tracker = self.trackerManager.getTracker(by: indexPath)
-            let trackerCategories = self.trackerManager.getCategory(by: indexPath.section)
+            let trackerCategories = self.trackerManager.getCategory(by: indexPath, for: tracker.isPinned)
             let record = self.trackerRecordStore.countRecordsForTracker(byId: tracker.id)
             
             let pinActionTitle = tracker.isPinned ? NSLocalizedString("unpin", comment: "Unpin action") : NSLocalizedString("pin", comment: "Pin action")

@@ -57,8 +57,18 @@ final class TrackerManager {
         filtredCategories[section].title
     }
     
-    func getCategory(by section: Int) -> TrackerCategory {
-        filtredCategories[section]
+    func getCategory(by indexPath: IndexPath, for isPinned: Bool = false) -> TrackerCategory {
+        if isPinned {
+            do {
+                let category = try trackerStore.getTrackerCategory(for: filtredCategories[indexPath.section].trackers[indexPath.row])
+                guard let category else { return filtredCategories[indexPath.section] }
+                return category
+            } catch {
+                print("Error fetching category: \(error.localizedDescription)")
+            }
+        }
+        
+        return filtredCategories[indexPath.section]
     }
     
     func getTracker(by indexPath: IndexPath) -> Tracker {
