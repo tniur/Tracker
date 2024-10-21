@@ -76,6 +76,37 @@ final class TrackerStore: NSObject {
         return []
     }
     
+    func deleteTracker(_ tracker: Tracker) throws {
+        guard let tracker = try getTrackerById(tracker.id) else { return }
+        context.delete(tracker)
+        try context.save()
+    }
+    
+    func updateTracker(_ tracker: Tracker, _ category: TrackerCategory) throws {
+        let fetchRequest = TrackerCategoryCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "title == %@", category.title)
+        fetchRequest.fetchLimit = 1
+        let categoriesCoreData = try context.fetch(fetchRequest)
+        
+        guard let trackerCoreData = try getTrackerById(tracker.id) else { return }
+        trackerCoreData.name = tracker.name
+        trackerCoreData.color = tracker.color
+        trackerCoreData.emoji = tracker.emoji
+        trackerCoreData.timetable = tracker.timetable as NSObject
+        trackerCoreData.category = categoriesCoreData.first
+        try context.save()
+    }
+    
+    private func getTrackerById(_ id: UUID) throws -> TrackerCoreData? {
+        let fetchRequest = TrackerCoreData.fetchRequest()
+        
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        fetchRequest.fetchLimit = 1
+        
+        let tracker = try context.fetch(fetchRequest)
+        return tracker.first
+    }
+    
     private func getTrackersFromTrackersCoreData(trackersCoreData: [TrackerCoreData]) -> [Tracker] {
         var trackers: [Tracker] = []
         trackersCoreData.forEach {

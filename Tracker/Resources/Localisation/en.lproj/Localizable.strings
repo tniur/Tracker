@@ -35,6 +35,7 @@
 "create" = "Create";
 "cancel" = "Cancel";
 "done" = "Done";
+"save" = "Save";
 
 "newHabbit" = "New habbit";
 "newIrregular" = "New irregular event";
@@ -73,3 +74,13 @@
 "notCompletedTrackers" = "Not completed trackers";
 
 "nothingFound" = "Nothing was found";
+
+"pin" = "Pin";
+"unpin" = "Unpin";
+"edit" = "Edit";
+"delete" = "Delete";
+
+"deleteConfirmation" = "Are you sure you want to delete the tracker?";
+
+"editHabbit" = "Habbit editing";
+"editEvent" = "Event editing";

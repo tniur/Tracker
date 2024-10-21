@@ -25,6 +25,8 @@ final class TrackerManager {
     
     private var filtredCategories: [TrackerCategory] = []
     
+    private let trackerStore = TrackerStore()
+    
     private let trackerCategoryStore = TrackerCategoryStore()
     
     private let trackerRecordStore = TrackerRecordStore()
@@ -33,6 +35,7 @@ final class TrackerManager {
     
     init() {
         trackerCategoryStore.delegate = self
+        trackerStore.delegate = self
         filterCategories()
     }
     
@@ -52,6 +55,10 @@ final class TrackerManager {
     
     func getCategoryTitle(in section: Int) -> String {
         filtredCategories[section].title
+    }
+    
+    func getCategory(by section: Int) -> TrackerCategory {
+        filtredCategories[section]
     }
     
     func getTracker(by indexPath: IndexPath) -> Tracker {
@@ -88,9 +95,17 @@ final class TrackerManager {
             print("Error fetching categories: \(error.localizedDescription)")
         }
     }
+    
+    func deleteTracker(_ tracker: Tracker) {
+        do {
+            try trackerStore.deleteTracker(tracker)
+        } catch {
+            print("Error deleting tracker: \(error.localizedDescription)")
+        }
+    }
 }
 
-extension TrackerManager: TrackerCategoryStoreDelegate {
+extension TrackerManager: TrackerCategoryStoreDelegate, TrackerStoreDelegate {
     func didUpdate() {
         filterCategories()
     }

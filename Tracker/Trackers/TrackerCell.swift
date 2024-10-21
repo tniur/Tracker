@@ -73,6 +73,12 @@ final class TrackerCell: UICollectionViewCell {
         return button
     }()
     
+    private let pinImage: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "pin")
+        return image
+    }()
+    
     // MARK: - Life-Cycle
     
     override init(frame: CGRect) {
@@ -86,7 +92,7 @@ final class TrackerCell: UICollectionViewCell {
     
     // MARK: - Methods
     
-    func configure(backgroundColor: UIColor, emoji: String, title: String, record: Int, isChecked: Bool) {
+    func configure(backgroundColor: UIColor, emoji: String, title: String, record: Int, isChecked: Bool, isPinned: Bool) {
         backgroundCardView.backgroundColor = backgroundColor
         doneButton.backgroundColor = backgroundColor
         titleLabel.text = title
@@ -105,6 +111,12 @@ final class TrackerCell: UICollectionViewCell {
             doneButton.setImage(UIImage(systemName: "plus"), for: .normal)
             doneButton.alpha = 1
         }
+        
+        if isPinned {
+            pinImage.isHidden = false
+        } else {
+            pinImage.isHidden = true
+        }
     }
     
     private func setup() {
@@ -121,7 +133,7 @@ final class TrackerCell: UICollectionViewCell {
         doneButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         emojiBackgroundView.layer.cornerRadius = emojiBackgroundSize / 2
         
-        [backgroundCardView, titleLabel, recordLabel, doneButton, emojiBackgroundView, emojiLabel].forEach {
+        [backgroundCardView, titleLabel, recordLabel, doneButton, emojiBackgroundView, emojiLabel, pinImage].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
@@ -163,6 +175,13 @@ final class TrackerCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             emojiLabel.centerXAnchor.constraint(equalTo: emojiBackgroundView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: emojiBackgroundView.centerYAnchor),
+        ])
+        
+        NSLayoutConstraint.activate([
+            pinImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            pinImage.centerYAnchor.constraint(equalTo: emojiBackgroundView.centerYAnchor),
+            pinImage.heightAnchor.constraint(equalToConstant: 24),
+            pinImage.widthAnchor.constraint(equalToConstant: 24),
         ])
     }
     
