@@ -82,18 +82,25 @@ final class TrackerStore: NSObject {
         try context.save()
     }
     
-    func updateTracker(_ tracker: Tracker, _ category: TrackerCategory) throws {
-        let fetchRequest = TrackerCategoryCoreData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "title == %@", category.title)
-        fetchRequest.fetchLimit = 1
-        let categoriesCoreData = try context.fetch(fetchRequest)
-        
+    func updateTracker(_ tracker: Tracker, _ category: TrackerCategory? = nil) throws {
         guard let trackerCoreData = try getTrackerById(tracker.id) else { return }
+        
+        var categoryCoreData = trackerCoreData.category
+        
+        if let category {
+            let fetchRequest = TrackerCategoryCoreData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "title == %@", category.title)
+            fetchRequest.fetchLimit = 1
+            let categoriesCoreData = try context.fetch(fetchRequest)
+            categoryCoreData = categoriesCoreData.first
+        }
+        
         trackerCoreData.name = tracker.name
         trackerCoreData.color = tracker.color
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.timetable = tracker.timetable as NSObject
-        trackerCoreData.category = categoriesCoreData.first
+        trackerCoreData.category = categoryCoreData
+        trackerCoreData.isPinned = tracker.isPinned
         try context.save()
     }
     
@@ -116,7 +123,7 @@ final class TrackerStore: NSObject {
                   let emoji = $0.emoji,
                   let timetable = $0.timetable as? [WeekDay] else { return }
             
-            trackers.append(Tracker(id: id, name: name, color: color, emoji: emoji, timetable: timetable))
+            trackers.append(Tracker(id: id, name: name, color: color, emoji: emoji, timetable: timetable, isPinned: $0.isPinned))
         }
         return trackers
     }

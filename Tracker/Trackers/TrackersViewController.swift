@@ -232,7 +232,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         let record = trackerRecordStore.countRecordsForTracker(byId: tracker.id)
         let isChecked = trackerRecordStore.isRecordExists(trackerId: tracker.id, date: currentDate)
         
-        cell.configure(backgroundColor: tracker.color, emoji: tracker.emoji, title: tracker.name, record: record, isChecked: isChecked, isPinned: true)
+        cell.configure(backgroundColor: tracker.color, emoji: tracker.emoji, title: tracker.name, record: record, isChecked: isChecked, isPinned: tracker.isPinned)
         cell.delegate = self
         
         return cell
@@ -264,24 +264,24 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(actionProvider: { _ in
+            let tracker = self.trackerManager.getTracker(by: indexPath)
+            let trackerCategories = self.trackerManager.getCategory(by: indexPath.section)
+            let record = self.trackerRecordStore.countRecordsForTracker(byId: tracker.id)
             
-            let pinAction = UIAction(title: NSLocalizedString("pin", comment: "Pin action"), image: .none) { _ in
-                print("Закрепить")
+            let pinActionTitle = tracker.isPinned ? NSLocalizedString("unpin", comment: "Unpin action") : NSLocalizedString("pin", comment: "Pin action")
+            
+            let pinAction = UIAction(title: pinActionTitle, image: .none) { [weak self] _ in
+                self?.trackerManager.changeTrackerPinState(for: tracker, isPinned: !tracker.isPinned)
             }
             
             let editAction = UIAction(title: NSLocalizedString("edit", comment: "Edit action"), image: .none) { [weak self] _ in
-                guard let tracker = self?.trackerManager.getTracker(by: indexPath) else { return }
-                
                 let trackerType = tracker.timetable.isEmpty ? TrackerType.event : TrackerType.habbit
-                guard let record = self?.trackerRecordStore.countRecordsForTracker(byId: tracker.id),
-                      let trackerCategories = self?.trackerManager.getCategory(by: indexPath.section) else { return }
                 let editTrackerViewController = EditTrackerViewController(trackerType: trackerType, tracker: tracker, category: trackerCategories, record: record)
                 self?.present(editTrackerViewController, animated: true)
             }
             
             let deleteAction = UIAction(title: NSLocalizedString("delete", comment: "Delete action"), image: .none, attributes: .destructive) { [weak self] _ in
                 self?.showDeleteConfirmationMenu { [weak self] in
-                    guard let tracker = self?.trackerManager.getTracker(by: indexPath) else { return }
                     self?.trackerManager.deleteTracker(tracker)
                 }
             }

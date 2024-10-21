@@ -291,7 +291,7 @@ final class EditTrackerViewController: UIViewController {
               let emoji = collectionViewSections[0].items[selectedEmojiIndex] as? String,
               let color = collectionViewSections[1].items[selectedColorIndex] as? UIColor else { return }
         
-        let newTracker = Tracker(id: tracker.id, name: trackerName, color: color, emoji: emoji, timetable: timetable)
+        let newTracker = Tracker(id: tracker.id, name: trackerName, color: color, emoji: emoji, timetable: timetable, isPinned: tracker.isPinned)
         
         do {
             try trackerStore.updateTracker(newTracker, category)

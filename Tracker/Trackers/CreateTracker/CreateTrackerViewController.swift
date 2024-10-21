@@ -270,7 +270,7 @@ final class CreateTrackerViewController: UIViewController {
               let emoji = collectionViewSections[0].items[selectedEmojiIndex] as? String,
               let color = collectionViewSections[1].items[selectedColorIndex] as? UIColor else { return }
         
-        let newTracker = Tracker(id: UUID(), name: trackerName, color: color, emoji: emoji, timetable: timetable)
+        let newTracker = Tracker(id: UUID(), name: trackerName, color: color, emoji: emoji, timetable: timetable, isPinned: false)
         
         do {
             try trackerStore.addNewTracker(newTracker, category)

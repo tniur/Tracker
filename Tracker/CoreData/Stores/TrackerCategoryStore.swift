@@ -67,6 +67,7 @@ final class TrackerCategoryStore: NSObject {
         trackerCoreData.color = tracker.color
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.timetable = tracker.timetable as NSObject
+        trackerCoreData.isPinned = tracker.isPinned
         
         trackerCoreData.category = categoriesCoreData.first
     }
@@ -106,7 +107,7 @@ final class TrackerCategoryStore: NSObject {
                   let emoji = $0.emoji,
                   let timetable = $0.timetable as? [WeekDay] else { return }
             
-            trackers.append(Tracker(id: id, name: name, color: color, emoji: emoji, timetable: timetable))
+            trackers.append(Tracker(id: id, name: name, color: color, emoji: emoji, timetable: timetable, isPinned: $0.isPinned))
         }
         return trackers
     }
