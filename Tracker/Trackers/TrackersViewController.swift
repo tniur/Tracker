@@ -41,6 +41,7 @@ final class TrackersViewController: UIViewController {
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 9
         let collecion = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collecion.backgroundColor = .ypBackground
         return collecion
     }()
     
@@ -76,6 +77,8 @@ final class TrackersViewController: UIViewController {
     }
     
     private func setupView() {
+        view.backgroundColor = .ypBackground
+        
         [searchTextField, placeholderView, filterPlaceholderView, trackersCollection, filtersButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -166,7 +169,7 @@ final class TrackersViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         
         let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addButtonTapped))
-        addButton.tintColor = .black
+        addButton.tintColor = .ypText
         navigationItem.leftBarButtonItem = addButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         definesPresentationContext = true

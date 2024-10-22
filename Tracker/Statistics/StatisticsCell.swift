@@ -21,7 +21,7 @@ final class StatisticsCell: UITableViewCell {
         let view = UIView()
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
-        view.backgroundColor = .clear
+        view.backgroundColor = .ypBackground
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -29,7 +29,7 @@ final class StatisticsCell: UITableViewCell {
     private let recordLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 34, weight: .bold)
-        label.textColor = .ypBlack
+        label.textColor = .ypText
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -37,7 +37,7 @@ final class StatisticsCell: UITableViewCell {
     private let subtitleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypBlack
+        label.textColor = .ypText
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -73,6 +73,7 @@ final class StatisticsCell: UITableViewCell {
     private func setupView() {
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
+        contentView.backgroundColor = .ypBackground
 
         contentView.addSubview(containerView)
         [recordLabel, subtitleLabel].forEach { containerView.addSubview($0) }

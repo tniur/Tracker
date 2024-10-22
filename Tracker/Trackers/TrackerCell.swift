@@ -48,7 +48,7 @@ final class TrackerCell: UICollectionViewCell {
     private let recordLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypBlack
+        label.textColor = .ypText
         return label
     }()
     
@@ -68,7 +68,7 @@ final class TrackerCell: UICollectionViewCell {
     private let doneButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.tintColor = .white
+        button.tintColor = .ypBackground
         button.clipsToBounds = true
         return button
     }()
@@ -128,6 +128,7 @@ final class TrackerCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
         contentView.backgroundColor = .white
+        contentView.backgroundColor = .ypBackground
         
         doneButton.layer.cornerRadius = doneButtonSize / 2
         doneButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)

@@ -30,8 +30,32 @@ final class TabBarController: UITabBarController {
         )
         
         self.tabBar.layer.borderWidth = 1
-        self.tabBar.layer.borderColor = UIColor(named: "YP LightGray")?.cgColor
+        self.tabBar.layer.borderColor = UIColor { (traits: UITraitCollection) -> UIColor in
+            if traits.userInterfaceStyle == .light {
+                return .ypLightGray
+            } else {
+                return .ypBlack
+            }
+        }.cgColor
         
         self.viewControllers = [trackersViewNavigationController, statisticsViewNavigationController]
+    }
+    
+    private func updateTabBarBorderColor(for traits: UITraitCollection) {
+        self.tabBar.layer.borderColor = UIColor { (traits: UITraitCollection) -> UIColor in
+            if traits.userInterfaceStyle == .light {
+                return .ypLightGray
+            } else {
+                return .ypBlack
+            }
+        }.cgColor
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateTabBarBorderColor(for: traitCollection)
+        }
     }
 }

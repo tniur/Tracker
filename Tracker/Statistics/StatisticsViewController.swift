@@ -25,6 +25,7 @@ final class StatisticsViewController: UIViewController {
         let tableView = UITableView()
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
+        tableView.backgroundColor = .ypBackground
         return tableView
     }()
     
@@ -50,6 +51,8 @@ final class StatisticsViewController: UIViewController {
     }
     
     private func setupView() {
+        view.backgroundColor = .ypBackground
+        
         [placeholderView, statisticsTableView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
