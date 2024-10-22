@@ -91,7 +91,12 @@ final class TrackerManager {
             
             let filteredCategories = categories.compactMap { category -> TrackerCategory? in
                 let filteredTrackers = category.trackers.filter { tracker in
-                    if tracker.isPinned {
+                    if (tracker.timetable.isEmpty || tracker.timetable.contains(weekDay))
+                        && (tracker.name.lowercased().contains(searchedWord ?? "") || (searchedWord == nil))
+                        && (filter == .all || filter == .today
+                            || (filter == .completed && trackerRecordStore.isRecordExists(trackerId: tracker.id, date: currentDate))
+                            || (filter == .notCompleted && !trackerRecordStore.isRecordExists(trackerId: tracker.id, date: currentDate)))
+                        && tracker.isPinned {
                         pinnedTrackers.append(tracker)
                     }
                     
