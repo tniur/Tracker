@@ -64,6 +64,16 @@ final class TrackersViewController: UIViewController {
         setup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        AnalyticsService.report(event: .open, screen: .main, item: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        AnalyticsService.report(event: .close, screen: .main, item: nil)
+    }
+    
     // MARK: - Methods
     
     private func setup() {
@@ -146,6 +156,7 @@ final class TrackersViewController: UIViewController {
         let filtersViewController = FiltersViewController()
         filtersViewController.delegate = self
         present(filtersViewController, animated: true)
+        AnalyticsService.report(event: .click, screen: .main, item: .filter)
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
@@ -156,6 +167,7 @@ final class TrackersViewController: UIViewController {
     @objc private func addButtonTapped() {
         let chooseTrackerTypeViewController = ChooseTrackerTypeViewController()
         present(chooseTrackerTypeViewController, animated: true)
+        AnalyticsService.report(event: .click, screen: .main, item: .addTrack)
     }
     
     @objc private func textFieldDidChange(_ searchField: UISearchTextField) {
@@ -283,12 +295,14 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
                 let trackerType = tracker.timetable.isEmpty ? TrackerType.event : TrackerType.habbit
                 let editTrackerViewController = EditTrackerViewController(trackerType: trackerType, tracker: tracker, category: trackerCategories, record: record)
                 self?.present(editTrackerViewController, animated: true)
+                AnalyticsService.report(event: .click, screen: .main, item: .edit)
             }
             
             let deleteAction = UIAction(title: NSLocalizedString("delete", comment: "Delete action"), image: .none, attributes: .destructive) { [weak self] _ in
                 self?.showDeleteConfirmationMenu { [weak self] in
                     self?.trackerManager.deleteTracker(tracker)
                 }
+                AnalyticsService.report(event: .click, screen: .main, item: .delete)
             }
             
             return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
@@ -312,6 +326,8 @@ extension TrackersViewController: TrackerCellDelegate {
                 print("Error adding new record: \(error.localizedDescription)")
             }
         }
+        
+        AnalyticsService.report(event: .click, screen: .main, item: .track)
     }
 }
 

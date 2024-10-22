@@ -57,6 +57,7 @@
 		E9B307172CC83DC1001DBF8D /* testTrackerViewControllerDark.1.png in Resources */ = {isa = PBXBuildFile; fileRef = E9B307112CC83DC1001DBF8D /* testTrackerViewControllerDark.1.png */; };
 		E9B307182CC83DC1001DBF8D /* testTrackerViewControllerLight.1.png in Resources */ = {isa = PBXBuildFile; fileRef = E9B307122CC83DC1001DBF8D /* testTrackerViewControllerLight.1.png */; };
 		E9B307192CC83DC1001DBF8D /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B307152CC83DC1001DBF8D /* TrackerTests.swift */; };
+		E9B3071D2CC85FBC001DBF8D /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B3071C2CC85FBB001DBF8D /* AnalyticsService.swift */; };
 		E9CB34B52CA741A8005C6226 /* TrackerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E9CB34B32CA741A8005C6226 /* TrackerModel.xcdatamodeld */; };
 		E9F6BE022CC7BAAF00BA276A /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = E9F6BE012CC7BAAF00BA276A /* InlineSnapshotTesting */; };
 		E9F6BE042CC7BAAF00BA276A /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = E9F6BE032CC7BAAF00BA276A /* SnapshotTesting */; };
@@ -130,6 +131,7 @@
 		E9B307112CC83DC1001DBF8D /* testTrackerViewControllerDark.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testTrackerViewControllerDark.1.png; sourceTree = "<group>"; };
 		E9B307122CC83DC1001DBF8D /* testTrackerViewControllerLight.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testTrackerViewControllerLight.1.png; sourceTree = "<group>"; };
 		E9B307152CC83DC1001DBF8D /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
+		E9B3071C2CC85FBB001DBF8D /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		E9B9A5FB2CA18E4400E3B5E6 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9CB34B42CA741A8005C6226 /* TrackerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerModel.xcdatamodel; sourceTree = "<group>"; };
 		E9F6BDF72CC7B91800BA276A /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -325,6 +327,7 @@
 		E9B306E22CC83DBE001DBF8D /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				E9B3071C2CC85FBB001DBF8D /* AnalyticsService.swift */,
 				E9B306A72CC83DBE001DBF8D /* CoreData */,
 				E9B306AA2CC83DBE001DBF8D /* Extensions */,
 				E9B306AE2CC83DBE001DBF8D /* Models */,
@@ -585,6 +588,7 @@
 				E9B306F62CC83DBE001DBF8D /* StatisticsCell.swift in Sources */,
 				E9B306F72CC83DBE001DBF8D /* StatisticsViewController.swift in Sources */,
 				E9B306F82CC83DBE001DBF8D /* ChooseCategoryViewController.swift in Sources */,
+				E9B3071D2CC85FBC001DBF8D /* AnalyticsService.swift in Sources */,
 				E9B306F92CC83DBE001DBF8D /* ChooseCategoryViewModel.swift in Sources */,
 				E9B306FA2CC83DBE001DBF8D /* CreateCategoryViewController.swift in Sources */,
 				E9B306FB2CC83DBE001DBF8D /* TimetableViewController.swift in Sources */,
