@@ -42,6 +42,8 @@ final class TrackersViewController: UIViewController {
         layout.minimumInteritemSpacing = 9
         let collecion = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collecion.backgroundColor = .ypBackground
+        collecion.alwaysBounceVertical = true
+        collecion.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
         return collecion
     }()
     
@@ -308,24 +310,6 @@ extension TrackersViewController: TrackerCellDelegate {
                 trackersCollection.reloadItems(at: [indexPath])
             } catch {
                 print("Error adding new record: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        let scrollViewHeight = scrollView.frame.size.height
-        
-        if contentHeight != 0 && offsetY + scrollViewHeight >= contentHeight {
-            UIView.animate(withDuration: 0.5) { [weak self] in
-                self?.filtersButton.alpha = 0
-            }
-        }
-        
-        if offsetY + scrollViewHeight < contentHeight {
-            UIView.animate(withDuration: 0.5) { [weak self] in
-                self?.filtersButton.alpha = 1
             }
         }
     }
