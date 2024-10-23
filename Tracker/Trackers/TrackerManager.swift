@@ -20,15 +20,13 @@ final class TrackerManager {
     // MARK: - Properties
     
     weak var delegate: TrackerManagerDelegate?
+
+    // MARK: - Private Properties
     
     private var allTrackersCount: Int = 0
-    
     private var filtredCategories: [TrackerCategory] = []
-    
     private let trackerStore = TrackerStore()
-    
     private let trackerCategoryStore = TrackerCategoryStore()
-    
     private let trackerRecordStore = TrackerRecordStore()
     
     // MARK: - Life-Cycle

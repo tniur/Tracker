@@ -132,7 +132,15 @@ final class TrackerStore: NSObject {
                   let emoji = $0.emoji,
                   let timetable = $0.timetable as? [WeekDay] else { return }
             
-            trackers.append(Tracker(id: id, name: name, color: color, emoji: emoji, timetable: timetable, isPinned: $0.isPinned))
+            let tracker = Tracker(
+                id: id,
+                name: name,
+                color: color,
+                emoji: emoji,
+                timetable: timetable,
+                isPinned: $0.isPinned
+            )
+            trackers.append(tracker)
         }
         return trackers
     }

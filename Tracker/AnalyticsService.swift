@@ -25,11 +25,13 @@ enum Item: String {
 
 struct AnalyticsService {
     static func activate() {
-        let configuration = AppMetricaConfiguration(apiKey: "c82bbc75-c3af-446c-888b-d66d192bf3eb")
-        AppMetrica.activate(with: configuration!)
+        guard let configuration = AppMetricaConfiguration(
+            apiKey: "c82bbc75-c3af-446c-888b-d66d192bf3eb"
+        ) else { return }
+        AppMetrica.activate(with: configuration)
     }
     
-    static func report(event: Event, screen: Screen, item: Item?) {
+    static func report(event: Event, screen: Screen, item: Item? = nil) {
         var parameters: [AnyHashable: Any] = ["screen": screen.rawValue]
         if let item {
             parameters["item"] = item.rawValue

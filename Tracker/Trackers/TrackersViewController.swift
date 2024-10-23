@@ -66,12 +66,12 @@ final class TrackersViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        AnalyticsService.report(event: .open, screen: .main, item: nil)
+        AnalyticsService.report(event: .open, screen: .main)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        AnalyticsService.report(event: .close, screen: .main, item: nil)
+        AnalyticsService.report(event: .close, screen: .main)
     }
     
     // MARK: - Methods

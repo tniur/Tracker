@@ -106,7 +106,10 @@ extension StatisticsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: StatisticsCell.identifier, for: indexPath) as? StatisticsCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: StatisticsCell.identifier,
+            for: indexPath
+        ) as? StatisticsCell else {
             return UITableViewCell()
         }
     

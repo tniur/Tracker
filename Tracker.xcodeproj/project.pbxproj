@@ -54,8 +54,6 @@
 		E9B3070E2CC83DBE001DBF8D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B306DC2CC83DBE001DBF8D /* Constants.swift */; };
 		E9B3070F2CC83DBE001DBF8D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B306E02CC83DBE001DBF8D /* SceneDelegate.swift */; };
 		E9B307102CC83DBE001DBF8D /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B306E12CC83DBE001DBF8D /* TabBarController.swift */; };
-		E9B307172CC83DC1001DBF8D /* testTrackerViewControllerDark.1.png in Resources */ = {isa = PBXBuildFile; fileRef = E9B307112CC83DC1001DBF8D /* testTrackerViewControllerDark.1.png */; };
-		E9B307182CC83DC1001DBF8D /* testTrackerViewControllerLight.1.png in Resources */ = {isa = PBXBuildFile; fileRef = E9B307122CC83DC1001DBF8D /* testTrackerViewControllerLight.1.png */; };
 		E9B307192CC83DC1001DBF8D /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B307152CC83DC1001DBF8D /* TrackerTests.swift */; };
 		E9B3071D2CC85FBC001DBF8D /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B3071C2CC85FBB001DBF8D /* AnalyticsService.swift */; };
 		E9CB34B52CA741A8005C6226 /* TrackerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E9CB34B32CA741A8005C6226 /* TrackerModel.xcdatamodeld */; };
@@ -128,8 +126,6 @@
 		E9B306DE2CC83DBE001DBF8D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E9B306E02CC83DBE001DBF8D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E9B306E12CC83DBE001DBF8D /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		E9B307112CC83DC1001DBF8D /* testTrackerViewControllerDark.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testTrackerViewControllerDark.1.png; sourceTree = "<group>"; };
-		E9B307122CC83DC1001DBF8D /* testTrackerViewControllerLight.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testTrackerViewControllerLight.1.png; sourceTree = "<group>"; };
 		E9B307152CC83DC1001DBF8D /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
 		E9B3071C2CC85FBB001DBF8D /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		E9B9A5FB2CA18E4400E3B5E6 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -345,27 +341,9 @@
 			path = Tracker;
 			sourceTree = "<group>";
 		};
-		E9B307132CC83DC1001DBF8D /* TrackerTests */ = {
-			isa = PBXGroup;
-			children = (
-				E9B307112CC83DC1001DBF8D /* testTrackerViewControllerDark.1.png */,
-				E9B307122CC83DC1001DBF8D /* testTrackerViewControllerLight.1.png */,
-			);
-			path = TrackerTests;
-			sourceTree = "<group>";
-		};
-		E9B307142CC83DC1001DBF8D /* __Snapshots__ */ = {
-			isa = PBXGroup;
-			children = (
-				E9B307132CC83DC1001DBF8D /* TrackerTests */,
-			);
-			path = __Snapshots__;
-			sourceTree = "<group>";
-		};
 		E9B307162CC83DC1001DBF8D /* TrackerTests */ = {
 			isa = PBXGroup;
 			children = (
-				E9B307142CC83DC1001DBF8D /* __Snapshots__ */,
 				E9B307152CC83DC1001DBF8D /* TrackerTests.swift */,
 			);
 			path = TrackerTests;
@@ -495,8 +473,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9B307172CC83DC1001DBF8D /* testTrackerViewControllerDark.1.png in Resources */,
-				E9B307182CC83DC1001DBF8D /* testTrackerViewControllerLight.1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
