@@ -23,7 +23,7 @@ final class PlaceholderView: UIView {
     
     private let placeholderLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "YP Black")
+        label.textColor = .ypText
         label.font = UIFont.systemFont(ofSize: 12)
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping

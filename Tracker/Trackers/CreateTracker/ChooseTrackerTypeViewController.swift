@@ -13,7 +13,7 @@ final class ChooseTrackerTypeViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Создание трекера"
+        label.text = NSLocalizedString("creatingTracker", comment: "Creating tracker")
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = UIColor(named: "YP Black")
         return label
@@ -29,7 +29,7 @@ final class ChooseTrackerTypeViewController: UIViewController {
     
     private let habitButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(NSLocalizedString("habbit", comment: "Habbit"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = UIColor(named: "YP Black")
@@ -39,7 +39,7 @@ final class ChooseTrackerTypeViewController: UIViewController {
     
     private let irregularEventsButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Нерегулярные событие", for: .normal)
+        button.setTitle(NSLocalizedString("irregularEvent", comment: "An irregular event"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = UIColor(named: "YP Black")

@@ -19,7 +19,7 @@ final class TrackersCollectionSupplementaryView: UICollectionReusableView {
             
             titleLabel.translatesAutoresizingMaskIntoConstraints = false
             titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
-            titleLabel.textColor = .ypBlack
+            titleLabel.textColor = .ypText
             
             NSLayoutConstraint.activate([
                 titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),

@@ -18,14 +18,14 @@ final class CreateCategoryViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.text = "Новая категория"
+        label.text = NSLocalizedString("newCategory", comment: "New category")
         label.textColor = .ypBlack
         return label
     }()
     
     private let categoryTitleTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("enterCategoryName", comment: "Enter category name")
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         textField.textColor = .ypBlack
         textField.backgroundColor = UIColor(named: "YP BackgroundDay")
@@ -36,7 +36,7 @@ final class CreateCategoryViewController: UIViewController {
     
     private let doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("done", comment: "done"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.isEnabled = false

@@ -22,12 +22,12 @@ final class ChooseCategoryViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.text = "Категория"
+        label.text = NSLocalizedString("category", comment: "Category")
         label.textColor = .ypBlack
         return label
     }()
     
-    private let placeholderView = PlaceholderView(frame: CGRect.zero, title: "Привычки и события можно \nобъединить по смыслу", image: UIImage(named: "empty_placeholder"))
+    private let placeholderView = PlaceholderView(frame: CGRect.zero, title: NSLocalizedString("habitsAndEventsCombinedInfo", comment: "Habits and events combined info"), image: UIImage(named: "empty_placeholder"))
     
     private let сategoryTableView: UITableView = {
         let tableView = UITableView()
@@ -37,7 +37,7 @@ final class ChooseCategoryViewController: UIViewController {
     
     private let createCategoryButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("addCategory", comment: "Add category"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
@@ -103,7 +103,7 @@ final class ChooseCategoryViewController: UIViewController {
         сategoryTableView.dataSource = self
         сategoryTableView.delegate = self
         сategoryTableView.isMultipleTouchEnabled = false
-        сategoryTableView.register(ChooseCategoryCell.self, forCellReuseIdentifier: ChooseCategoryCell.reuseId)
+        сategoryTableView.register(ChooseItemCell.self, forCellReuseIdentifier: ChooseItemCell.reuseId)
     }
     
     private func setupConstraints() {
@@ -149,7 +149,7 @@ extension ChooseCategoryViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChooseCategoryCell.reuseId, for: indexPath) as? ChooseCategoryCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChooseItemCell.reuseId, for: indexPath) as? ChooseItemCell else {
             return UITableViewCell()
         }
         
@@ -176,7 +176,7 @@ extension ChooseCategoryViewController: UITableViewDataSource {
 
 extension ChooseCategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ChooseCategoryCell.height
+        return ChooseItemCell.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

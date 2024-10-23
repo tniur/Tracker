@@ -48,7 +48,7 @@ final class TrackerCell: UICollectionViewCell {
     private let recordLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypBlack
+        label.textColor = .ypText
         return label
     }()
     
@@ -68,9 +68,15 @@ final class TrackerCell: UICollectionViewCell {
     private let doneButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.tintColor = .white
+        button.tintColor = .ypBackground
         button.clipsToBounds = true
         return button
+    }()
+    
+    private let pinImage: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "pin")
+        return image
     }()
     
     // MARK: - Life-Cycle
@@ -86,20 +92,17 @@ final class TrackerCell: UICollectionViewCell {
     
     // MARK: - Methods
     
-    func configure(backgroundColor: UIColor, emoji: String, title: String, record: Int, isChecked: Bool) {
+    func configure(backgroundColor: UIColor, emoji: String, title: String, record: Int, isChecked: Bool, isPinned: Bool) {
         backgroundCardView.backgroundColor = backgroundColor
         doneButton.backgroundColor = backgroundColor
         titleLabel.text = title
         emojiLabel.text = emoji
         
-        switch record % 10 {
-        case 1:
-            recordLabel.text = "\(record) день"
-        case 2,3,4:
-            recordLabel.text = "\(record) дня"
-        default:
-            recordLabel.text = "\(record) дней"
-        }
+        let recordString = String.localizedStringWithFormat(
+            NSLocalizedString("numberOfDays", comment: "Number of record days"),
+            record
+        )
+        recordLabel.text = recordString
         
         if isChecked {
             doneButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
@@ -107,6 +110,12 @@ final class TrackerCell: UICollectionViewCell {
         } else {
             doneButton.setImage(UIImage(systemName: "plus"), for: .normal)
             doneButton.alpha = 1
+        }
+        
+        if isPinned {
+            pinImage.isHidden = false
+        } else {
+            pinImage.isHidden = true
         }
     }
     
@@ -119,12 +128,13 @@ final class TrackerCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
         contentView.backgroundColor = .white
+        contentView.backgroundColor = .ypBackground
         
         doneButton.layer.cornerRadius = doneButtonSize / 2
         doneButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         emojiBackgroundView.layer.cornerRadius = emojiBackgroundSize / 2
         
-        [backgroundCardView, titleLabel, recordLabel, doneButton, emojiBackgroundView, emojiLabel].forEach {
+        [backgroundCardView, titleLabel, recordLabel, doneButton, emojiBackgroundView, emojiLabel, pinImage].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
@@ -166,6 +176,13 @@ final class TrackerCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             emojiLabel.centerXAnchor.constraint(equalTo: emojiBackgroundView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: emojiBackgroundView.centerYAnchor),
+        ])
+        
+        NSLayoutConstraint.activate([
+            pinImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            pinImage.centerYAnchor.constraint(equalTo: emojiBackgroundView.centerYAnchor),
+            pinImage.heightAnchor.constraint(equalToConstant: 24),
+            pinImage.widthAnchor.constraint(equalToConstant: 24),
         ])
     }
     

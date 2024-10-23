@@ -76,6 +76,53 @@ final class TrackerStore: NSObject {
         return []
     }
     
+    func deleteTracker(_ tracker: Tracker) throws {
+        guard let tracker = try getTrackerById(tracker.id) else { return }
+        context.delete(tracker)
+        try context.save()
+    }
+    
+    func updateTracker(_ tracker: Tracker, _ category: TrackerCategory? = nil) throws {
+        guard let trackerCoreData = try getTrackerById(tracker.id) else { return }
+        
+        var categoryCoreData = trackerCoreData.category
+        
+        if let category {
+            let fetchRequest = TrackerCategoryCoreData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "title == %@", category.title)
+            fetchRequest.fetchLimit = 1
+            let categoriesCoreData = try context.fetch(fetchRequest)
+            categoryCoreData = categoriesCoreData.first
+        }
+        
+        trackerCoreData.name = tracker.name
+        trackerCoreData.color = tracker.color
+        trackerCoreData.emoji = tracker.emoji
+        trackerCoreData.timetable = tracker.timetable as NSObject
+        trackerCoreData.category = categoryCoreData
+        trackerCoreData.isPinned = tracker.isPinned
+        try context.save()
+    }
+    
+    func getTrackerCategory(for tracker: Tracker) throws -> TrackerCategory? {
+        let trackerCoreData = try getTrackerById(tracker.id)
+        
+        guard let category = trackerCoreData?.category,
+              let categoryTitle = category.title else { return nil }
+        
+        return try trackerCategoryStore.getCategory(by: categoryTitle)
+    }
+    
+    private func getTrackerById(_ id: UUID) throws -> TrackerCoreData? {
+        let fetchRequest = TrackerCoreData.fetchRequest()
+        
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        fetchRequest.fetchLimit = 1
+        
+        let tracker = try context.fetch(fetchRequest)
+        return tracker.first
+    }
+    
     private func getTrackersFromTrackersCoreData(trackersCoreData: [TrackerCoreData]) -> [Tracker] {
         var trackers: [Tracker] = []
         trackersCoreData.forEach {
@@ -85,7 +132,15 @@ final class TrackerStore: NSObject {
                   let emoji = $0.emoji,
                   let timetable = $0.timetable as? [WeekDay] else { return }
             
-            trackers.append(Tracker(id: id, name: name, color: color, emoji: emoji, timetable: timetable))
+            let tracker = Tracker(
+                id: id,
+                name: name,
+                color: color,
+                emoji: emoji,
+                timetable: timetable,
+                isPinned: $0.isPinned
+            )
+            trackers.append(tracker)
         }
         return trackers
     }

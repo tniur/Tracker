@@ -1,5 +1,5 @@
 //
-//  ChooseCategoryCell.swift
+//  ChooseItemCell.swift
 //  Tracker
 //
 //  Created by Pavel Bobkov on 11.10.2024.
@@ -7,11 +7,11 @@
 
 import UIKit
 
-final class ChooseCategoryCell: UITableViewCell {
+final class ChooseItemCell: UITableViewCell {
     
     // MARK: - Properties
     
-    static let reuseId = "ChooseCategoryCell"
+    static let reuseId = "ChooseItemCell"
     static let height: CGFloat = 75
     
     private var maskedCorners: CACornerMask = []

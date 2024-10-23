@@ -34,7 +34,7 @@ final class OnboardingPageViewController: UIPageViewController {
     
     private let scipOnboardingButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("onboardingSkip", comment: "Skip onboarding"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
